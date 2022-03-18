@@ -46,14 +46,14 @@ class Costumes extends Component {
     if (direction) {
       this.setState({ costumesLoading: true, costumes: [] });
     }
-    let page = this.state.costumesPage;
+    let page = this.state.costumePage;
     if (direction === 'next') {
       page++;
-      this.setState({ costumesPage: page });
+      this.setState({ costumePage: page });
     }
     if (direction === 'previous') {
       page--;
-      this.setState({ costumesPage: page });
+      this.setState({ costumePage: page });
     }
     fetch('http://localhost:8080/costume/costumes?page=' + page, {
     })
@@ -64,10 +64,6 @@ class Costumes extends Component {
       return res.json();
     })
     .then(resData => {
-      console.log(resData.costumes)
-      if (!Array.isArray(resData.costumes)) {
-        return <p>There was an error loading your data!</p>;
-      }
       this.setState({
         costumes: resData.costumes.map(costume => {
           return {...costume,
@@ -93,7 +89,7 @@ class Costumes extends Component {
     return (
       <Fragment>
         <ErrorHandler error={this.state.error} onHandle={this.errorHandler} />
-        <section className="feed">
+        <section className="feed costumes">
           {this.state.costumesLoading && (
             <div style={{ textAlign: 'center', marginTop: '2rem' }}>
               <Loader />
@@ -107,25 +103,22 @@ class Costumes extends Component {
           ) : null}
           {!this.state.costumesLoading && (
             <Paginator
-              onPrevious={this.state.loadCostumes('previous')}
-              onNext={this.state.loadCostumes('next')}
+              onPrevious={this.loadCostumes.bind(this, 'previous')}
+              onNext={this.loadCostumes.bind(this, 'next')}
               lastPage={Math.ceil(this.state.totalItems / 2)}
-              currentPage={this.state.costumesPage}
+              currentPage={this.state.costumePage}
             >
-              {this.state.posts.map(costume => (
+              {this.state.costumes.map(costume => (
                 <Costume
                   key={costume._id}
                   id={costume._id}
-                  date={new Date(costume.createdAt).toLocaleDateString('en-US')}
-                  admin={costume.creator}
-                  title={costume.costumeName}
+                  admin={costume.userId}
+                  name={costume.name}
                   size={costume.size}
                   category={costume.category}
                   rentalFee={costume.rentalFee}
                   image={costume.imageUrl}
                   description={costume.description}
-                  onStartEdit={this.startEditCostumeHandler.bind(this, costume._id)}
-                  onDelete={this.deleteCostumeHandler.bind(this, costume._id)}
                 />
               ))}
             </Paginator>

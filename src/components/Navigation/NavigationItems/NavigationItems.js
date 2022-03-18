@@ -22,7 +22,7 @@ const navigationItems = props => [
   props.isAuth && (
     <ul className="loggedInLinks" key={props.mobile ? `mobileloggedInLinks` : 'loggedInLinks'}>
       <li className={["navigation-item", props.mobile ? 'mobile' : '']} key={props.mobile ? `mobileloggedIncostumes` : 'loggedIncostumes'}>
-        <NavLink to={'/costumes'} key={props.mobile ? `mobileLinkCostumes` : 'linkCostumes'}></NavLink>
+        <NavLink to={'/costume/costumes'} key={props.mobile ? `mobileLinkCostumes` : 'linkCostumes'}>Costumes</NavLink>
       </li>
       <li className="navigation-item" key={props.mobile ? `mobilelogout` : 'logout'}>
         <button onClick={props.onLogout}>Logout</button>
@@ -31,7 +31,7 @@ const navigationItems = props => [
   ),
   props.isAdmin && (
     <li className={["navigation-item", props.mobile ? 'mobile' : '']} key={props.mobile ? `mobileadmin` : 'admin'}>
-      <NavLink to={'/admin'}></NavLink>
+      <NavLink to={'/admin'}>Admin</NavLink>
     </li>
   )
 ];

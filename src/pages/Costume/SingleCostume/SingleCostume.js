@@ -5,16 +5,17 @@ import './SingleCostume.css';
 
 class SinglePost extends Component {
   state = {
-    title: '',
-    author: '',
-    date: '',
+    category: '',
+    name: '',
+    rentalFee: '',
+    size: '',
     image: '',
-    content: ''
+    description: ''
   };
 
   componentDidMount() {
-    const postId = this.props.match.params.postId;
-    fetch('http://localhost:8080/feed/post/' + postId, {
+    const costumeId = this.props.match.params.costumeId;
+    fetch('http://localhost:8080/costume/costumes/' + costumeId, {
       headers: {
         Authorization: 'Bearer ' + this.props.token
       }
@@ -27,11 +28,14 @@ class SinglePost extends Component {
       })
       .then(resData => {
         this.setState({
-          title: resData.post.title,
-          author: resData.post.creator.name,
-          image: "http://localhost:8080/" + resData.post.image,
-          date: new Date(resData.post.createdAt).toLocaleDateString('en-US'),
-          content: resData.post.content
+          id: resData.costume.id,
+          name: resData.costume.name,
+          category: resData.costume.category,
+          rentalFee: resData.costume.rentalFee,
+          size: resData.costume.size,
+          image: resData.costume.imageUrl,
+          description: resData.costume.description,
+          adminId: resData.costume.userId
         });
       })
       .catch(err => {
@@ -42,14 +46,15 @@ class SinglePost extends Component {
   render() {
     return (
       <section className="single-post">
-        <h1>{this.state.title}</h1>
+        <h1>{this.state.name}</h1>
         <h2>
-          Created by {this.state.author} on {this.state.date}
+          {this.state.category} - {this.state.size}
         </h2>
+        <h3>{this.state.rentalFee}</h3>
         <div className="single-post__image">
           <Image contain imageUrl={this.state.image} />
         </div>
-        <p>{this.state.content}</p>
+        <p>{this.state.description}</p>
       </section>
     );
   }

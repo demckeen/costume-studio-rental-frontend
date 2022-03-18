@@ -184,7 +184,7 @@ class App extends Component {
           )}
         />
         <Route
-          path="/costumes"
+          path="/costume/costumes"
           exact
           render={props => (
             <CostumesPage
@@ -194,6 +194,14 @@ class App extends Component {
             />
           )}
         />
+        <Route
+            path="/costume/costumes/:costumeId"
+            render={props => (
+              <SingleCostumePage
+                {...props}
+              />
+            )}
+          />
         <Redirect to="/" />
       </Switch>
     );
@@ -208,7 +216,16 @@ class App extends Component {
             )}
           />
           <Route
-            path="/:costumeId"
+            path="/costume/costumes"
+            render={props => (
+              <CostumesPage
+              {...props}
+              userId={this.state.userId} token={this.state.token}
+              />
+            )}
+          />
+          <Route
+            path="/costume/costumes/:costumeId"
             render={props => (
               <SingleCostumePage
                 {...props}

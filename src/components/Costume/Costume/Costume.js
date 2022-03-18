@@ -1,32 +1,22 @@
 import React from 'react';
 
-import Button from '../../Button/Button';
+import CostumeButton from '../../Button/Button';
 import './Costume.css';
 
-const costume = props => (
-  <article className="post">
-    <header className="post__header">
-      <h3 className="post__meta">
-        Created by {props.author} on {props.date}
+const costume = props => [
+  <article className="post" key={props._id}>
+    <header className="post__header" key={`${props._id}-header`}>
+      <h3 className="post__meta" key={`${props._id}-details`}>
+        {props.category} - {props.size}
       </h3>
-      <h1 className="post__title">{props.title}</h1>
+      <h1 className="post__title" key={`${props.id}-title`}>{props.name}</h1>
     </header>
-    {/* <div className="post__image">
-      <Image imageUrl={props.image} contain />
-    </div>
-    <div className="post__content">{props.content}</div> */}
-    <div className="post__actions">
-      <Button mode="flat" link={props.id}>
+    <div className={"post__actions " + props.id + 'action'} key={props.id + 'action'}>
+      <CostumeButton mode="flat" link={`costumes/${props.id}`}>
         View
-      </Button>
-      <Button mode="flat" onClick={props.onStartEdit}>
-        Edit
-      </Button>
-      <Button mode="flat" design="danger" onClick={props.onDelete}>
-        Delete
-      </Button>
+      </CostumeButton>
     </div>
   </article>
-);
+];
 
 export default costume;
