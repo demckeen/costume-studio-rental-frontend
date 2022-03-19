@@ -194,7 +194,7 @@ class Admin extends Component {
             console.log(resData);
             this.setState(prevState => {
               const updatedCostumes = prevState.costumes.filter(c => c._id !== costumeId);
-              return { costumes: updatedCostums, costumesLoading: false };
+              return { costumes: updatedCostumes, costumesLoading: false };
             });
           })
           .catch(err => {
@@ -245,7 +245,7 @@ class Admin extends Component {
                 >
                   {this.state.costumes.map(costume => (
                     <Costume
-                      key={costume_id}
+                      key={costume._id}
                       id={costume._id}
                       date={new Date(costume.createdAt).toLocaleDateString('en-US')}
                       admin={costume.creator}
