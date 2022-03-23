@@ -15,7 +15,7 @@ const COSTUME_FORM = {
     touched: false,
     validators: [required, length({ min: 3 })]
   },
-  name: {
+  costumeName: {
     value: '',
     valid: false,
     touched: false,
@@ -66,9 +66,9 @@ class CostumeEdit extends Component {
           value: this.props.selectedCostume.category,
           valid: true
         },
-        name: {
-          ...prevState.costumeForm.name,
-          value: this.props.selectedCostume.name,
+        costumeName: {
+          ...prevState.costumeForm.costumeName,
+          value: this.props.selectedCostume.costumeName,
           valid: true
         },
         rentalFee: {
@@ -155,7 +155,7 @@ class CostumeEdit extends Component {
   acceptCostumeChangeHandler = () => {
     const costume = {
       category: this.state.costumeForm.category.value,
-      name: this.state.costumeForm.name.value,
+      costumeName: this.state.costumeForm.costumeName.value,
       rentalFee: this.state.costumeForm.rentalFee.value,
       size: this.state.costumeForm.size.value,
       imageUrl: this.state.costumeForm.imageUrl.value,
@@ -192,14 +192,14 @@ class CostumeEdit extends Component {
               value={this.state.costumeForm['category'].value}
             />
             <Input
-              id="name"
-              label="Name"
+              id="costumeName"
+              label="Costume Name"
               control="input"
               onChange={this.postInputChangeHandler}
-              onBlur={this.inputBlurHandler.bind(this, 'name')}
-              valid={this.state.costumeForm['name'].valid}
-              touched={this.state.costumeForm['name'].touched}
-              value={this.state.costumeForm['name'].value}
+              onBlur={this.inputBlurHandler.bind(this, 'costumeName')}
+              valid={this.state.costumeForm['costumeName'].valid}
+              touched={this.state.costumeForm['costumeName'].touched}
+              value={this.state.costumeForm['costumeName'].value}
             />
             <Input
               id="rentalFee"

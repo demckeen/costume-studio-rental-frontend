@@ -14,14 +14,15 @@ class SingleCostume extends Component {
     image: '',
     description: '',
     isAuth: false,
-    isAdmin: false
+    isAdmin: false,
+    userId: '',
   };
 
   componentDidMount() {
     const costumeId = this.props.match.params.costumeId;
     fetch('http://localhost:8080/costume/costumes/' + costumeId, {
       headers: {
-        Authorization: 'Bearer ' + this.props.token
+        Authorization: 'Bearer ' + localStorage.getItem('token')
       }
     })
       .then(res => {
@@ -33,7 +34,8 @@ class SingleCostume extends Component {
       .then(resData => {
         console.log(this.props);
         if(this.props.isAuth) {
-          this.setState({isAuth: true})
+          this.setState({isAuth: true},
+          this.setState({userId: localStorage.getItem('userId')}))
         }
         if(this.props.isAdmin) {
           this.setState({isAdmin: true})
@@ -54,6 +56,39 @@ class SingleCostume extends Component {
       });
   }
 
+  addCartHandler = (event, reqId) => {
+    const token = localStorage.getItem('token');
+    fetch('http://localhost:8080/costume/cart/', {
+      method: 'POST',
+      body: JSON.stringify({
+        costumeId: this.state.id,
+        userId: this.state.userId
+      }),
+      headers: {
+        'Authorization': 'Bearer ' + token,
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Adding costume to cart failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      console.log(resData);
+    })
+    .catch(this.catchError);
+  }
+
+  errorHandler = () => {
+    this.setState({ error: null });
+  };
+
+  catchError = error => {
+    this.setState({ error: error });
+  };
+
   render() {
     return (
       <section className="single-post">
@@ -66,11 +101,11 @@ class SingleCostume extends Component {
           <Image contain imageUrl={this.state.image} />
         </div>
         <p>{this.state.description}</p>
-        {this.state.isAuth ? <CostumeButton link={'cart'}>Add to Cart</CostumeButton> : ''}
+        {this.state.isAuth ? <CostumeButton onClick={this.addCartHandler.bind(this, this.state.id)}>Add to Cart</CostumeButton> : ''}
         {this.state.isAdmin ? 
           <div className='adminActions'>
-            <AdminButton mode= {'flat'} link={'admin/edit/' + this.state.id}>Edit Costume</AdminButton>
-            <AdminButton mode={'flat'} link={'admin/delete/' + this.state.id}>Delete Costume</AdminButton>
+            <AdminButton mode='flat' link={'admin/edit/' + this.state.id}>Edit Costume</AdminButton>
+            <AdminButton mode='flat' link={'admin/delete/' + this.state.id}>Delete Costume</AdminButton>
           </div> : ''}
       </section>
     );

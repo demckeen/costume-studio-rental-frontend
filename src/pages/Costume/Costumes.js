@@ -113,7 +113,7 @@ class Costumes extends Component {
     });
     const formData = new FormData();
     formData.append('category', costumeData.category);
-    formData.append('name', costumeData.name);
+    formData.append('costumeName', costumeData.costumeName);
     formData.append('size', costumeData.size);
     formData.append('rentalFee', costumeData.rentalFee);
     formData.append('description', costumeData.description);
@@ -145,7 +145,7 @@ class Costumes extends Component {
         const costume = {
           id: resData.costume._id,
           costumeCategory: resData.costume.category,
-          costumeName: resData.costume.name,
+          costumeName: resData.costume.costumeName,
           costumeFee: resData.costume.rentalFee,
           size: resData.costume.size,
           imageUrl: resData.costume.imageUrl,
@@ -258,7 +258,7 @@ class Costumes extends Component {
                   key={costume._id + Math.random()}
                   id={costume._id}
                   admin={costume.userId}
-                  name={costume.name}
+                  costumeName={costume.costumeName}
                   size={costume.size}
                   category={costume.category}
                   rentalFee={costume.rentalFee}
