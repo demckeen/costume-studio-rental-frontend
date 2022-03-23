@@ -8,20 +8,38 @@ import Image from '../../Image/Image';
 import { required, length } from '../../../util/validators';
 import { generateBase64FromImage } from '../../../util/image';
 
-const POST_FORM = {
-  title: {
+const COSTUME_FORM = {
+  category: {
+    value: '',
+    valid: false,
+    touched: false,
+    validators: [required, length({ min: 3 })]
+  },
+  costumeName: {
     value: '',
     valid: false,
     touched: false,
     validators: [required, length({ min: 5 })]
   },
-  image: {
+  rentalFee: {
     value: '',
     valid: false,
     touched: false,
-    validators: [required]
+    validators: [required, length({ min: 2 })]
   },
-  content: {
+  size: {
+    value: '',
+    valid: false,
+    touched: false,
+    validators: [required, length({ min: 1 })]
+  },
+  imageUrl: {
+    value: '',
+    valid: false,
+    touched: false,
+    validators: [required, length({ min: 1 })]
+  },
+  description: {
     value: '',
     valid: false,
     touched: false,
@@ -29,9 +47,9 @@ const POST_FORM = {
   }
 };
 
-class FeedEdit extends Component {
+class CostumeEdit extends Component {
   state = {
-    postForm: POST_FORM,
+    costumeForm: COSTUME_FORM,
     formIsValid: false,
     imagePreview: null
   };
@@ -40,26 +58,41 @@ class FeedEdit extends Component {
     if (
       this.props.editing &&
       prevProps.editing !== this.props.editing &&
-      prevProps.selectedPost !== this.props.selectedPost
+      prevProps.selectedCostume !== this.props.selectedCostume
     ) {
-      const postForm = {
-        title: {
-          ...prevState.postForm.title,
-          value: this.props.selectedPost.title,
+      const costumeForm = {
+        category: {
+          ...prevState.costumeForm.category,
+          value: this.props.selectedCostume.category,
+          valid: true
+        },
+        costumeName: {
+          ...prevState.costumeForm.costumeName,
+          value: this.props.selectedCostume.costumeName,
+          valid: true
+        },
+        rentalFee: {
+          ...prevState.costumeForm.rentalFee,
+          value: this.props.selectedCostume.rentalFee,
+          valid: true
+        },
+        size: {
+          ...prevState.costumeForm.size,
+          value: this.props.selectedCostume.size,
           valid: true
         },
         image: {
-          ...prevState.postForm.image,
-          value: this.props.selectedPost.imagePath,
+          ...prevState.costumeForm.imageUrl,
+          value: this.props.selectedCostume.imageUrl,
           valid: true
         },
-        content: {
-          ...prevState.postForm.content,
-          value: this.props.selectedPost.content,
+        description: {
+          ...prevState.costumeForm.description,
+          value: this.props.selectedCostume.description,
           valid: true
         }
       };
-      this.setState({ postForm: postForm, formIsValid: true });
+      this.setState({ costumeForm: costumeForm, formIsValid: true });
     }
   }
 
@@ -75,13 +108,13 @@ class FeedEdit extends Component {
     }
     this.setState(prevState => {
       let isValid = true;
-      for (const validator of prevState.postForm[input].validators) {
+      for (const validator of prevState.costumeForm[input].validators) {
         isValid = isValid && validator(value);
       }
       const updatedForm = {
-        ...prevState.postForm,
+        ...prevState.costumeForm,
         [input]: {
-          ...prevState.postForm[input],
+          ...prevState.costumeForm[input],
           valid: isValid,
           value: files ? files[0] : value
         }
@@ -91,7 +124,7 @@ class FeedEdit extends Component {
         formIsValid = formIsValid && updatedForm[inputName].valid;
       }
       return {
-        postForm: updatedForm,
+        costumeForm: updatedForm,
         formIsValid: formIsValid
       };
     });
@@ -100,10 +133,10 @@ class FeedEdit extends Component {
   inputBlurHandler = input => {
     this.setState(prevState => {
       return {
-        postForm: {
-          ...prevState.postForm,
+        costumeForm: {
+          ...prevState.costumeForm,
           [input]: {
-            ...prevState.postForm[input],
+            ...prevState.costumeForm[input],
             touched: true
           }
         }
@@ -111,23 +144,26 @@ class FeedEdit extends Component {
     });
   };
 
-  cancelPostChangeHandler = () => {
+  cancelCostumeChangeHandler = () => {
     this.setState({
-      postForm: POST_FORM,
+      costumeForm: COSTUME_FORM,
       formIsValid: false
     });
     this.props.onCancelEdit();
   };
 
-  acceptPostChangeHandler = () => {
-    const post = {
-      title: this.state.postForm.title.value,
-      image: this.state.postForm.image.value,
-      content: this.state.postForm.content.value
+  acceptCostumeChangeHandler = () => {
+    const costume = {
+      category: this.state.costumeForm.category.value,
+      costumeName: this.state.costumeForm.costumeName.value,
+      rentalFee: this.state.costumeForm.rentalFee.value,
+      size: this.state.costumeForm.size.value,
+      imageUrl: this.state.costumeForm.imageUrl.value,
+      description: this.state.costumeForm.description.value
     };
-    this.props.onFinishEdit(post);
+    this.props.onFinishEdit(costume);
     this.setState({
-      postForm: POST_FORM,
+      costumeForm: COSTUME_FORM,
       formIsValid: false,
       imagePreview: null
     });
@@ -136,50 +172,89 @@ class FeedEdit extends Component {
   render() {
     return this.props.editing ? (
       <Fragment>
-        <Backdrop onClick={this.cancelPostChangeHandler} />
+        <Backdrop onClick={this.cancelCostumeChangeHandler} />
         <Modal
-          title="New Post"
+          title="New Costume"
           acceptEnabled={this.state.formIsValid}
-          onCancelModal={this.cancelPostChangeHandler}
-          onAcceptModal={this.acceptPostChangeHandler}
+          onCancelModal={this.cancelCostumeChangeHandler}
+          onAcceptModal={this.acceptCostumeChangeHandler}
           isLoading={this.props.loading}
         >
           <form>
             <Input
-              id="title"
-              label="Title"
+              id="category"
+              label="Category"
               control="input"
               onChange={this.postInputChangeHandler}
-              onBlur={this.inputBlurHandler.bind(this, 'title')}
-              valid={this.state.postForm['title'].valid}
-              touched={this.state.postForm['title'].touched}
-              value={this.state.postForm['title'].value}
+              onBlur={this.inputBlurHandler.bind(this, 'category')}
+              valid={this.state.costumeForm['category'].valid}
+              touched={this.state.costumeForm['category'].touched}
+              value={this.state.costumeForm['category'].value}
             />
-            <FilePicker
-              id="image"
-              label="Image"
+            <Input
+              id="costumeName"
+              label="Costume Name"
               control="input"
               onChange={this.postInputChangeHandler}
-              onBlur={this.inputBlurHandler.bind(this, 'image')}
-              valid={this.state.postForm['image'].valid}
-              touched={this.state.postForm['image'].touched}
+              onBlur={this.inputBlurHandler.bind(this, 'costumeName')}
+              valid={this.state.costumeForm['costumeName'].valid}
+              touched={this.state.costumeForm['costumeName'].touched}
+              value={this.state.costumeForm['costumeName'].value}
             />
-            <div className="new-post__preview-image">
+            <Input
+              id="rentalFee"
+              label="Rental Fee"
+              control="input"
+              onChange={this.postInputChangeHandler}
+              onBlur={this.inputBlurHandler.bind(this, 'rentalFee')}
+              valid={this.state.costumeForm['rentalFee'].valid}
+              touched={this.state.costumeForm['rentalFee'].touched}
+              value={this.state.costumeForm['rentalFee'].value}
+            />
+            <Input
+              id="size"
+              label="Size"
+              control="input"
+              onChange={this.postInputChangeHandler}
+              onBlur={this.inputBlurHandler.bind(this, 'size')}
+              valid={this.state.costumeForm['size'].valid}
+              touched={this.state.costumeForm['size'].touched}
+              value={this.state.costumeForm['size'].value}
+            />
+            {/* <FilePicker
+              id="imageUrl"
+              label="Image URL"
+              control="input"
+              onChange={this.postInputChangeHandler}
+              onBlur={this.inputBlurHandler.bind(this, 'imageUrl')}
+              valid={this.state.costumeForm['imageUrl'].valid}
+              touched={this.state.costumeForm['imageUrl'].touched}
+            /> */}
+            <Input
+              id="imageUrl"
+              label="Image URL"
+              control="input"
+              onChange={this.postInputChangeHandler}
+              onBlur={this.inputBlurHandler.bind(this, 'imageUrl')}
+              valid={this.state.costumeForm['imageUrl'].valid}
+              touched={this.state.costumeForm['imageUrl'].touched}
+            />
+            {/* <div className="new-post__preview-image">
               {!this.state.imagePreview && <p>Please choose an image.</p>}
               {this.state.imagePreview && (
                 <Image imageUrl={this.state.imagePreview} contain left />
               )}
-            </div>
+            </div> */}
             <Input
-              id="content"
-              label="Content"
+              id="description"
+              label="Description"
               control="textarea"
               rows="5"
               onChange={this.postInputChangeHandler}
-              onBlur={this.inputBlurHandler.bind(this, 'content')}
-              valid={this.state.postForm['content'].valid}
-              touched={this.state.postForm['content'].touched}
-              value={this.state.postForm['content'].value}
+              onBlur={this.inputBlurHandler.bind(this, 'description')}
+              valid={this.state.costumeForm['description'].valid}
+              touched={this.state.costumeForm['description'].touched}
+              value={this.state.costumeForm['description'].value}
             />
           </form>
         </Modal>
@@ -188,5 +263,5 @@ class FeedEdit extends Component {
   }
 }
 
-export default FeedEdit;
+export default CostumeEdit;
 

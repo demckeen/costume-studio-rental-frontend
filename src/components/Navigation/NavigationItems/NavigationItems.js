@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 import './NavigationItems.css';
 
 const navItems = [
-  { id: 'Costumes', text: 'Costumes', link: '/costume/costumes', auth: false },
+  { id: 'Costumes', text: 'Costumes', link: '/costumes', auth: false },
   { id: 'login', text: 'Login', link: '/', auth: false },
   { id: 'signup', text: 'Signup', link: '/signup', auth: false }
 ];
@@ -22,7 +22,7 @@ const navigationItems = props => [
   props.isAuth && (
     <ul className="loggedInLinks" key={props.mobile ? `mobileloggedInLinks` : 'loggedInLinks'}>
       <li className={["navigation-item", props.mobile ? 'mobile' : '']} key={props.mobile ? `mobileloggedIncostumes` : 'loggedIncostumes'}>
-        <NavLink to={'/costume/costumes'} key={props.mobile ? `mobileLinkCostumes` : 'linkCostumes'}>Costumes</NavLink>
+        <NavLink to={'/costumes'} key={props.mobile ? `mobileLinkCostumes` : 'linkCostumes'}>Costumes</NavLink>
       </li>
       <li className="navigation-item" key={props.mobile ? `mobilelogout` : 'logout'}>
         <button onClick={props.onLogout}>Logout</button>

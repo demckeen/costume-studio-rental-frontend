@@ -22,7 +22,8 @@ class App extends Component {
     token: null,
     userId: null,
     authLoading: false,
-    error: null
+    error: null,
+    isAdmin: false,
   };
 
   componentDidMount() {
@@ -36,9 +37,10 @@ class App extends Component {
       return;
     }
     const userId = localStorage.getItem('userId');
+    const isAdmin = localStorage.getItem('isAdmin');
     const remainingMilliseconds =
       new Date(expiryDate).getTime() - new Date().getTime();
-    this.setState({ isAuth: true, token: token, userId: userId });
+    this.setState({ isAuth: true, token: token, userId: userId, isAdmin: isAdmin });
     this.setAutoLogout(remainingMilliseconds);
   }
 
@@ -86,10 +88,12 @@ class App extends Component {
           isAuth: true,
           token: resData.token,
           authLoading: false,
-          userId: resData.userId
+          userId: resData.userId,
+          isAdmin: resData.isAdmin
         });
         localStorage.setItem('token', resData.token);
         localStorage.setItem('userId', resData.userId);
+        localStorage.setItem('isAdmin', resData.isAdmin);
         const remainingMilliseconds = 60 * 60 * 1000;
         const expiryDate = new Date(
           new Date().getTime() + remainingMilliseconds
@@ -116,8 +120,8 @@ class App extends Component {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        name: authData.signupForm.name.value,
         email: authData.signupForm.email.value,
+        name: authData.signupForm.name.value,
         password: authData.signupForm.password.value
       })
     })
@@ -147,6 +151,30 @@ class App extends Component {
         });
       });
   };
+
+  cartHandler = (event, reqId) => {
+    const token = localStorage.getItem('token');
+    fetch('http://localhost:8080/costume/cart/', {
+      method: 'POST',
+      body: {
+ 
+      },
+      headers: {
+        'Authorization': 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Adding costume to cart failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      console.log(resData);
+    })
+    .catch(this.catchError);
+  
+  }
 
   setAutoLogout = milliseconds => {
     setTimeout(() => {
@@ -184,7 +212,7 @@ class App extends Component {
           )}
         />
         <Route
-          path="/costume/costumes"
+          path="/costumes"
           exact
           render={props => (
             <CostumesPage
@@ -195,10 +223,11 @@ class App extends Component {
           )}
         />
         <Route
-            path="/costume/costumes/:costumeId"
+            path="/costumes/:costumeId"
             render={props => (
               <SingleCostumePage
                 {...props}
+                onCart={this.cartHandler}
               />
             )}
           />
@@ -212,29 +241,127 @@ class App extends Component {
             path="/"
             exact
             render={props => (
-              <HomePage userId={this.state.userId} token={this.state.token} />
+              <HomePage userId={this.state.userId} token={this.state.token} isAuth={this.state.isAuth} />
             )}
           />
           <Route
-            path="/costume/costumes"
+            path="/costumes"
+            exact
             render={props => (
               <CostumesPage
               {...props}
               userId={this.state.userId} token={this.state.token}
+              isAuth={this.state.isAuth}
+              isAdmin={this.state.isAdmin}
               />
             )}
           />
           <Route
-            path="/costume/costumes/:costumeId"
+            path="/costumes/:costumeId"
+            exact
             render={props => (
               <SingleCostumePage
                 {...props}
                 userId={this.state.userId}
                 token={this.state.token}
+                isAuth={this.state.isAuth}
+                isAdmin={this.state.isAdmin}
+                onCart={this.cartHandler}
               />
             )}
           />
-          <Redirect to="/" />
+          <Redirect to="/" 
+            exact
+            render={props => (
+            <HomePage userId={this.state.userId} token={this.state.token} isAuth={this.state.isAuth} 
+            isAdmin={this.state.isAdmin} />)}
+          />
+        </Switch>
+      );
+    }
+
+    if (this.state.isAdmin) {
+      routes = (
+        <Switch>
+          <Route
+            path="/"
+            exact
+            render={props => (
+              <HomePage userId={this.state.userId} token={this.state.token} isAuth={this.state.isAuth}
+              isAdmin={this.state.isAdmin} />
+            )}
+          />
+          <Route
+            path="/costumes"
+            exact
+            render={props => (
+              <CostumesPage
+              {...props}
+              userId={this.state.userId} token={this.state.token}
+              isAuth={this.state.isAuth}
+              isAdmin={this.state.isAdmin}
+              />
+            )}
+          />
+          <Route
+            path="/costumes/:costumeId"
+            exact
+            render={props => (
+              <SingleCostumePage
+                {...props}
+                userId={this.state.userId}
+                token={this.state.token}
+                isAuth={this.state.isAuth}
+                isAdmin={this.state.isAdmin}
+                onCart={this.cartHandler}
+              />
+            )}
+          />
+          <Route
+            path="/costumes/admin/edit/:costumeId"
+            render={props => (
+              <SingleCostumePage
+                {...props}
+                userId={this.state.userId}
+                token={this.state.token}
+                isAuth={this.state.isAuth}
+                isAdmin={this.state.isAdmin}
+                onCart={this.cartHandler}
+              />
+            )}
+          />
+          <Route
+            path="/costumes/admin/delete/:costumeId"
+            render={props => (
+              <SingleCostumePage
+                {...props}
+                userId={this.state.userId}
+                token={this.state.token}
+                isAuth={this.state.isAuth}
+                isAdmin={this.state.isAdmin}
+                onCart={this.cartHandler}
+              />
+            )}
+          />
+          <Route
+            path="/costumes/admin/add-costume"
+            render={props => (
+              <SingleCostumePage
+                {...props}
+                userId={this.state.userId}
+                token={this.state.token}
+                isAuth={this.state.isAuth}
+                isAdmin={this.state.isAdmin}
+                onCart={this.cartHandler}
+              />
+            )}
+          />
+          <Redirect to="/" 
+            exact
+            render={props => (
+            <HomePage userId={this.state.userId} token={this.state.token} isAuth={this.state.isAuth} 
+            isAdmin={this.state.isAdmin} />)}
+          />
         </Switch>
       );
     }
