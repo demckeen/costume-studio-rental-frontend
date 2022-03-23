@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import openSocket from 'socket.io-client';
 import Costume from '../../components/Costume/Costume/Costume';
+import CostumeEdit from '../../components/Costume/CostumeEdit/CostumeEdit';
+import Button from '../../components/Button/Button';
 import Paginator from '../../components/Paginator/Paginator';
 import Loader from '../../components/Loader/Loader';
 import ErrorHandler from '../../components/ErrorHandler/ErrorHandler';
@@ -92,7 +94,7 @@ class Costumes extends Component {
 
   startEditCostumeHandler = costumeId => {
     this.setState(prevState => {
-      const loadedCostume = { ...prevState.costumes.find(p => p._id === costumeId) };
+      const loadedCostume = { ...prevState.costumes.find(c => c._id === costumeId) };
 
       return {
         isEditing: true,
@@ -215,6 +217,22 @@ class Costumes extends Component {
     return (
       <Fragment>
         <ErrorHandler error={this.state.error} onHandle={this.errorHandler} />
+        
+        {this.state.isAdmin ? 
+        <div className='adminContent'>
+            <CostumeEdit
+                editing={this.state.isEditing}
+                selectedCostume={this.state.editCostume}
+                loading={this.state.editLoading}
+                onCancelEdit={this.cancelEditHandler}
+                onFinishEdit={this.finishEditHandler}
+              />
+            <section className="feed__control">
+              <Button mode="raised" design="accent" onClick={this.newCostumeHandler}>
+                New Costume
+              </Button>
+            </section>
+          </div> : ''}
         <section className="feed costumes">
           {this.state.costumesLoading && (
             <div style={{ textAlign: 'center', marginTop: '2rem' }}>
@@ -247,6 +265,8 @@ class Costumes extends Component {
                   description={costume.description}
                   isAuth={this.state.isAuth}
                   isAdmin={this.state.isAdmin}
+                  onStartEdit={this.startEditCostumeHandler.bind(this, costume._id)}
+                  onDelete={this.deleteCostumeHandler.bind(this, costume._id)}
                 />
               ))}
             </Paginator>

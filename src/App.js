@@ -186,7 +186,7 @@ class App extends Component {
           )}
         />
         <Route
-          path="/costume/costumes"
+          path="/costumes"
           exact
           render={props => (
             <CostumesPage
@@ -197,7 +197,7 @@ class App extends Component {
           )}
         />
         <Route
-            path="/costume/costumes/:costumeId"
+            path="/costumes/:costumeId"
             render={props => (
               <SingleCostumePage
                 {...props}
@@ -218,7 +218,7 @@ class App extends Component {
             )}
           />
           <Route
-            path="/costume/costumes"
+            path="/costumes"
             exact
             render={props => (
               <CostumesPage
@@ -230,7 +230,7 @@ class App extends Component {
             )}
           />
           <Route
-            path="/costume/costumes/:costumeId"
+            path="/costumes/:costumeId"
             exact
             render={props => (
               <SingleCostumePage
@@ -264,7 +264,7 @@ class App extends Component {
             )}
           />
           <Route
-            path="/costume/costumes"
+            path="/costumes"
             exact
             render={props => (
               <CostumesPage
@@ -276,7 +276,7 @@ class App extends Component {
             )}
           />
           <Route
-            path="/costume/costumes/:costumeId"
+            path="/costumes/:costumeId"
             exact
             render={props => (
               <SingleCostumePage
@@ -289,7 +289,31 @@ class App extends Component {
             )}
           />
           <Route
-            path="/admin/edit/:costumeId"
+            path="/costumes/admin/edit/:costumeId"
+            render={props => (
+              <SingleCostumePage
+                {...props}
+                userId={this.state.userId}
+                token={this.state.token}
+                isAuth={this.state.isAuth}
+                isAdmin={this.state.isAdmin}
+              />
+            )}
+          />
+          <Route
+            path="/costumes/admin/delete/:costumeId"
+            render={props => (
+              <SingleCostumePage
+                {...props}
+                userId={this.state.userId}
+                token={this.state.token}
+                isAuth={this.state.isAuth}
+                isAdmin={this.state.isAdmin}
+              />
+            )}
+          />
+          <Route
+            path="/costumes/admin/add-costume"
             render={props => (
               <SingleCostumePage
                 {...props}
