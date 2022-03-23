@@ -9,7 +9,7 @@ const costume = props => [
       <h3 className="post__meta" key={`${props.id}-details`}>
         {props.category} - {props.size}
       </h3>
-      <h1 className="post__title" key={`${props.id}-title`}>{props.name}</h1>
+      <h1 className="post__title" key={`${props.id}-title`}>{props.costumeName}</h1>
     </header>
     <div className={"post__actions " + props.id + 'action'} key={props.id + 'action'}>
       <CostumeButton mode="flat" link={`costumes/${props.id}`}>

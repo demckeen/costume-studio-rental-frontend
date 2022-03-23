@@ -78,7 +78,7 @@ class Costumes extends Component {
       this.setState({
         costumes: resData.costumes.map(costume => {
           return {...costume,
-            imagePath: costume.image
+            imagePath: costume.imageUrl
           }
         }),
         totalCostumes: resData.totalItems,
@@ -250,7 +250,7 @@ class Costumes extends Component {
             <Paginator
               onPrevious={this.loadCostumes.bind(this, 'previous')}
               onNext={this.loadCostumes.bind(this, 'next')}
-              lastPage={Math.ceil(this.state.totalItems / 2)}
+              lastPage={Math.ceil(this.state.totalCostumes / 2)}
               currentPage={this.state.costumePage}
             >
               {this.state.costumes.map(costume => (
@@ -262,7 +262,7 @@ class Costumes extends Component {
                   size={costume.size}
                   category={costume.category}
                   rentalFee={costume.rentalFee}
-                  image={costume.imageUrl}
+                  imageUrl={costume.imageUrl}
                   description={costume.description}
                   isAuth={this.state.isAuth}
                   isAdmin={this.state.isAdmin}
