@@ -118,6 +118,7 @@ class Costumes extends Component {
     formData.append('rentalFee', costumeData.rentalFee);
     formData.append('description', costumeData.description);
     formData.append('imageUrl', costumeData.imageUrl);
+    
     let url = 'http://localhost:8080/admin/add-costume';
     let method = 'POST';
     if (this.state.editPost) {

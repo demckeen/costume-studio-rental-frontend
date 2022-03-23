@@ -37,7 +37,7 @@ const COSTUME_FORM = {
     value: '',
     valid: false,
     touched: false,
-    validators: [required]
+    validators: [required, length({ min: 1 })]
   },
   description: {
     value: '',
@@ -49,7 +49,7 @@ const COSTUME_FORM = {
 
 class CostumeEdit extends Component {
   state = {
-    postForm: COSTUME_FORM,
+    costumeForm: COSTUME_FORM,
     formIsValid: false,
     imagePreview: null
   };
@@ -58,12 +58,27 @@ class CostumeEdit extends Component {
     if (
       this.props.editing &&
       prevProps.editing !== this.props.editing &&
-      prevProps.selectedPost !== this.props.selectedPost
+      prevProps.selectedCostume !== this.props.selectedCostume
     ) {
       const costumeForm = {
-        title: {
-          ...prevState.costumeForm.title,
-          value: this.props.selectedCostume.title,
+        category: {
+          ...prevState.costumeForm.category,
+          value: this.props.selectedCostume.category,
+          valid: true
+        },
+        name: {
+          ...prevState.costumeForm.name,
+          value: this.props.selectedCostume.name,
+          valid: true
+        },
+        rentalFee: {
+          ...prevState.costumeForm.rentalFee,
+          value: this.props.selectedCostume.rentalFee,
+          valid: true
+        },
+        size: {
+          ...prevState.costumeForm.size,
+          value: this.props.selectedCostume.size,
           valid: true
         },
         image: {
@@ -140,7 +155,7 @@ class CostumeEdit extends Component {
   acceptCostumeChangeHandler = () => {
     const costume = {
       category: this.state.costumeForm.category.value,
-      name: this.state.costumeForm.title.value,
+      name: this.state.costumeForm.name.value,
       rentalFee: this.state.costumeForm.rentalFee.value,
       size: this.state.costumeForm.size.value,
       imageUrl: this.state.costumeForm.imageUrl.value,
@@ -157,12 +172,12 @@ class CostumeEdit extends Component {
   render() {
     return this.props.editing ? (
       <Fragment>
-        <Backdrop onClick={this.cancelPostChangeHandler} />
+        <Backdrop onClick={this.cancelCostumeChangeHandler} />
         <Modal
-          title="New Post"
+          title="New Costume"
           acceptEnabled={this.state.formIsValid}
-          onCancelModal={this.cancelPostChangeHandler}
-          onAcceptModal={this.acceptPostChangeHandler}
+          onCancelModal={this.cancelCostumeChangeHandler}
+          onAcceptModal={this.acceptCostumeChangeHandler}
           isLoading={this.props.loading}
         >
           <form>
@@ -172,9 +187,9 @@ class CostumeEdit extends Component {
               control="input"
               onChange={this.postInputChangeHandler}
               onBlur={this.inputBlurHandler.bind(this, 'category')}
-              valid={this.state.postForm['category'].valid}
-              touched={this.state.postForm['category'].touched}
-              value={this.state.postForm['category'].value}
+              valid={this.state.costumeForm['category'].valid}
+              touched={this.state.costumeForm['category'].touched}
+              value={this.state.costumeForm['category'].value}
             />
             <Input
               id="name"
@@ -182,9 +197,9 @@ class CostumeEdit extends Component {
               control="input"
               onChange={this.postInputChangeHandler}
               onBlur={this.inputBlurHandler.bind(this, 'name')}
-              valid={this.state.postForm['name'].valid}
-              touched={this.state.postForm['name'].touched}
-              value={this.state.postForm['name'].value}
+              valid={this.state.costumeForm['name'].valid}
+              touched={this.state.costumeForm['name'].touched}
+              value={this.state.costumeForm['name'].value}
             />
             <Input
               id="rentalFee"
@@ -192,25 +207,44 @@ class CostumeEdit extends Component {
               control="input"
               onChange={this.postInputChangeHandler}
               onBlur={this.inputBlurHandler.bind(this, 'rentalFee')}
-              valid={this.state.postForm['rentalFee'].valid}
-              touched={this.state.postForm['rentalFee'].touched}
-              value={this.state.postForm['rentalFee'].value}
+              valid={this.state.costumeForm['rentalFee'].valid}
+              touched={this.state.costumeForm['rentalFee'].touched}
+              value={this.state.costumeForm['rentalFee'].value}
             />
-            <FilePicker
+            <Input
+              id="size"
+              label="Size"
+              control="input"
+              onChange={this.postInputChangeHandler}
+              onBlur={this.inputBlurHandler.bind(this, 'size')}
+              valid={this.state.costumeForm['size'].valid}
+              touched={this.state.costumeForm['size'].touched}
+              value={this.state.costumeForm['size'].value}
+            />
+            {/* <FilePicker
               id="imageUrl"
               label="Image URL"
               control="input"
               onChange={this.postInputChangeHandler}
               onBlur={this.inputBlurHandler.bind(this, 'imageUrl')}
-              valid={this.state.postForm['imageUrl'].valid}
-              touched={this.state.postForm['imageUrl'].touched}
+              valid={this.state.costumeForm['imageUrl'].valid}
+              touched={this.state.costumeForm['imageUrl'].touched}
+            /> */}
+            <Input
+              id="imageUrl"
+              label="Image URL"
+              control="input"
+              onChange={this.postInputChangeHandler}
+              onBlur={this.inputBlurHandler.bind(this, 'imageUrl')}
+              valid={this.state.costumeForm['imageUrl'].valid}
+              touched={this.state.costumeForm['imageUrl'].touched}
             />
-            <div className="new-post__preview-image">
+            {/* <div className="new-post__preview-image">
               {!this.state.imagePreview && <p>Please choose an image.</p>}
               {this.state.imagePreview && (
                 <Image imageUrl={this.state.imagePreview} contain left />
               )}
-            </div>
+            </div> */}
             <Input
               id="description"
               label="Description"
@@ -218,9 +252,9 @@ class CostumeEdit extends Component {
               rows="5"
               onChange={this.postInputChangeHandler}
               onBlur={this.inputBlurHandler.bind(this, 'description')}
-              valid={this.state.postForm['description'].valid}
-              touched={this.state.postForm['description'].touched}
-              value={this.state.postForm['description'].value}
+              valid={this.state.costumeForm['description'].valid}
+              touched={this.state.costumeForm['description'].touched}
+              value={this.state.costumeForm['description'].value}
             />
           </form>
         </Modal>
