@@ -120,8 +120,8 @@ class App extends Component {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        name: authData.signupForm.name.value,
         email: authData.signupForm.email.value,
+        name: authData.signupForm.name.value,
         password: authData.signupForm.password.value
       })
     })
@@ -151,6 +151,30 @@ class App extends Component {
         });
       });
   };
+
+  cartHandler = (event, reqId) => {
+    const token = localStorage.getItem('token');
+    fetch('http://localhost:8080/costume/cart/', {
+      method: 'POST',
+      body: {
+ 
+      },
+      headers: {
+        'Authorization': 'Bearer ' + token
+      }
+    })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error('Adding costume to cart failed!');
+      }
+      return res.json();
+    })
+    .then(resData => {
+      console.log(resData);
+    })
+    .catch(this.catchError);
+  
+  }
 
   setAutoLogout = milliseconds => {
     setTimeout(() => {
@@ -203,6 +227,7 @@ class App extends Component {
             render={props => (
               <SingleCostumePage
                 {...props}
+                onCart={this.cartHandler}
               />
             )}
           />
@@ -241,6 +266,7 @@ class App extends Component {
                 token={this.state.token}
                 isAuth={this.state.isAuth}
                 isAdmin={this.state.isAdmin}
+                onCart={this.cartHandler}
               />
             )}
           />
@@ -287,6 +313,7 @@ class App extends Component {
                 token={this.state.token}
                 isAuth={this.state.isAuth}
                 isAdmin={this.state.isAdmin}
+                onCart={this.cartHandler}
               />
             )}
           />
@@ -299,6 +326,7 @@ class App extends Component {
                 token={this.state.token}
                 isAuth={this.state.isAuth}
                 isAdmin={this.state.isAdmin}
+                onCart={this.cartHandler}
               />
             )}
           />
@@ -311,6 +339,7 @@ class App extends Component {
                 token={this.state.token}
                 isAuth={this.state.isAuth}
                 isAdmin={this.state.isAdmin}
+                onCart={this.cartHandler}
               />
             )}
           />
@@ -323,6 +352,7 @@ class App extends Component {
                 token={this.state.token}
                 isAuth={this.state.isAuth}
                 isAdmin={this.state.isAdmin}
+                onCart={this.cartHandler}
               />
             )}
           />
