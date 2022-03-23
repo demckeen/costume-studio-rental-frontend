@@ -22,7 +22,8 @@ class App extends Component {
     token: null,
     userId: null,
     authLoading: false,
-    error: null
+    error: null,
+    isAdmin: false,
   };
 
   componentDidMount() {
@@ -86,7 +87,8 @@ class App extends Component {
           isAuth: true,
           token: resData.token,
           authLoading: false,
-          userId: resData.userId
+          userId: resData.userId,
+          isAdmin: resData.isAdmin
         });
         localStorage.setItem('token', resData.token);
         localStorage.setItem('userId', resData.userId);
@@ -212,29 +214,98 @@ class App extends Component {
             path="/"
             exact
             render={props => (
-              <HomePage userId={this.state.userId} token={this.state.token} />
+              <HomePage userId={this.state.userId} token={this.state.token} isAuth={this.state.isAuth} />
             )}
           />
           <Route
             path="/costume/costumes"
+            exact
             render={props => (
               <CostumesPage
               {...props}
               userId={this.state.userId} token={this.state.token}
+              isAuth={this.state.isAuth}
+              isAdmin={this.state.isAdmin}
               />
             )}
           />
           <Route
             path="/costume/costumes/:costumeId"
+            exact
             render={props => (
               <SingleCostumePage
                 {...props}
                 userId={this.state.userId}
                 token={this.state.token}
+                isAuth={this.state.isAuth}
+                isAdmin={this.state.isAdmin}
               />
             )}
           />
-          <Redirect to="/" />
+          <Redirect to="/" 
+            exact
+            render={props => (
+            <HomePage userId={this.state.userId} token={this.state.token} isAuth={this.state.isAuth} 
+            isAdmin={this.state.isAdmin} />)}
+          />
+        </Switch>
+      );
+    }
+
+    if (this.state.isAdmin) {
+      routes = (
+        <Switch>
+          <Route
+            path="/"
+            exact
+            render={props => (
+              <HomePage userId={this.state.userId} token={this.state.token} isAuth={this.state.isAuth}
+              isAdmin={this.state.isAdmin} />
+            )}
+          />
+          <Route
+            path="/costume/costumes"
+            exact
+            render={props => (
+              <CostumesPage
+              {...props}
+              userId={this.state.userId} token={this.state.token}
+              isAuth={this.state.isAuth}
+              isAdmin={this.state.isAdmin}
+              />
+            )}
+          />
+          <Route
+            path="/costume/costumes/:costumeId"
+            exact
+            render={props => (
+              <SingleCostumePage
+                {...props}
+                userId={this.state.userId}
+                token={this.state.token}
+                isAuth={this.state.isAuth}
+                isAdmin={this.state.isAdmin}
+              />
+            )}
+          />
+          <Route
+            path="/admin/edit/:costumeId"
+            render={props => (
+              <SingleCostumePage
+                {...props}
+                userId={this.state.userId}
+                token={this.state.token}
+                isAuth={this.state.isAuth}
+                isAdmin={this.state.isAdmin}
+              />
+            )}
+          />
+          <Redirect to="/" 
+            exact
+            render={props => (
+            <HomePage userId={this.state.userId} token={this.state.token} isAuth={this.state.isAuth} 
+            isAdmin={this.state.isAdmin} />)}
+          />
         </Switch>
       );
     }
