@@ -14,7 +14,9 @@ class Costumes extends Component {
     editCostume: null,
     costumePage: 1,
     costumesLoading: true,
-    editLoading: false
+    editLoading: false,
+    isAuth: false,
+    isAdmin: false,
   };
 
   componentDidMount() {
@@ -64,6 +66,13 @@ class Costumes extends Component {
       return res.json();
     })
     .then(resData => {
+      console.log(this.props);
+      if(this.props.isAuth) {
+        this.setState({isAuth: true})
+      }
+      if(this.props.isAdmin) {
+        this.setState({isAdmin: true})
+      }
       this.setState({
         costumes: resData.costumes.map(costume => {
           return {...costume,
@@ -75,6 +84,123 @@ class Costumes extends Component {
       });
     })
     .catch(this.catchError);
+  };
+
+  newCostumeHandler = () => {
+    this.setState({ isEditing: true });
+  };
+
+  startEditCostumeHandler = costumeId => {
+    this.setState(prevState => {
+      const loadedCostume = { ...prevState.costumes.find(p => p._id === costumeId) };
+
+      return {
+        isEditing: true,
+        editCostume: loadedCostume
+      };
+    });
+  };
+
+  cancelEditHandler = () => {
+    this.setState({ isEditing: false, editPost: null });
+  };
+
+  finishEditHandler = costumeData => {
+    this.setState({
+      editLoading: true
+    });
+    const formData = new FormData();
+    formData.append('category', costumeData.category);
+    formData.append('name', costumeData.name);
+    formData.append('size', costumeData.size);
+    formData.append('rentalFee', costumeData.rentalFee);
+    formData.append('description', costumeData.description);
+    formData.append('imageUrl', costumeData.imageUrl);
+    let url = 'http://localhost:8080/admin/add-costume';
+    let method = 'POST';
+    if (this.state.editPost) {
+      url = 'http://localhost:8080/admin/edit-costume/' + this.state.editCostume._id;
+      method = 'PUT';
+    }
+
+    fetch(url, {
+      method: method,
+      body: formData, 
+      headers: {
+        Authorization: 'Bearer ' + this.props.token
+      }
+      
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error('Creating or editing a costume failed!');
+        }
+        return res.json();
+      })
+      .then(resData => {
+        console.log(resData);
+        const costume = {
+          id: resData.costume._id,
+          costumeCategory: resData.costume.category,
+          costumeName: resData.costume.name,
+          costumeFee: resData.costume.rentalFee,
+          size: resData.costume.size,
+          imageUrl: resData.costume.imageUrl,
+          description: resData.costume.description,
+          adminId: resData.costume.userId
+        };
+        this.setState(prevState => {
+          let updatedCostumes = [...prevState.costumes];
+          if (prevState.editCostume) {
+            const costumeIndex = prevState.costumes.findIndex(
+              c => c._id === prevState.editCostume._id
+            );
+            updatedCostumes[costumeIndex] = costume;
+          }
+          return {
+            posts: updatedCostumes,
+            isEditing: false,
+            editCostume: null,
+            editLoading: false
+          };
+        });
+      })
+      .catch(err => {
+        console.log(err);
+        this.setState({
+          isEditing: false,
+          editCostume: null,
+          editLoading: false,
+          error: err
+        });
+      });
+  };
+
+  deleteCostumeHandler = costumeId => {
+    this.setState({ costumesLoading: true });
+    fetch('http://localhost:8080/admin/delete-costume/' + costumeId, {
+      method: "DELETE",
+      headers: {
+        Authorization: 'Bearer ' + this.props.token
+      }
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error('Deleting a costume failed!');
+        }
+        return res.json();
+      })
+      .then(resData => {
+        console.log(resData);
+        this.setState(prevState => {
+          const updatedCostumes = prevState.costumes.filter(c => c._id !== costumeId);
+          return { costumes: updatedCostumes, costumesLoading: false };
+        });
+      })
+      .catch(err => {
+        console.log(err);
+        this.setState({ costumesLoading: false });
+      });
   };
 
   errorHandler = () => {
@@ -110,7 +236,7 @@ class Costumes extends Component {
             >
               {this.state.costumes.map(costume => (
                 <Costume
-                  key={costume._id}
+                  key={costume._id + Math.random()}
                   id={costume._id}
                   admin={costume.userId}
                   name={costume.name}
@@ -119,6 +245,8 @@ class Costumes extends Component {
                   rentalFee={costume.rentalFee}
                   image={costume.imageUrl}
                   description={costume.description}
+                  isAuth={this.state.isAuth}
+                  isAdmin={this.state.isAdmin}
                 />
               ))}
             </Paginator>

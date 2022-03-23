@@ -8,20 +8,38 @@ import Image from '../../Image/Image';
 import { required, length } from '../../../util/validators';
 import { generateBase64FromImage } from '../../../util/image';
 
-const POST_FORM = {
-  title: {
+const COSTUME_FORM = {
+  category: {
+    value: '',
+    valid: false,
+    touched: false,
+    validators: [required, length({ min: 3 })]
+  },
+  name: {
     value: '',
     valid: false,
     touched: false,
     validators: [required, length({ min: 5 })]
   },
-  image: {
+  rentalFee: {
+    value: '',
+    valid: false,
+    touched: false,
+    validators: [required, length({ min: 2 })]
+  },
+  size: {
+    value: '',
+    valid: false,
+    touched: false,
+    validators: [required, length({ min: 1 })]
+  },
+  imageUrl: {
     value: '',
     valid: false,
     touched: false,
     validators: [required]
   },
-  content: {
+  description: {
     value: '',
     valid: false,
     touched: false,
@@ -29,9 +47,9 @@ const POST_FORM = {
   }
 };
 
-class FeedEdit extends Component {
+class CostumeEdit extends Component {
   state = {
-    postForm: POST_FORM,
+    postForm: COSTUME_FORM,
     formIsValid: false,
     imagePreview: null
   };
@@ -42,24 +60,24 @@ class FeedEdit extends Component {
       prevProps.editing !== this.props.editing &&
       prevProps.selectedPost !== this.props.selectedPost
     ) {
-      const postForm = {
+      const costumeForm = {
         title: {
-          ...prevState.postForm.title,
-          value: this.props.selectedPost.title,
+          ...prevState.costumeForm.title,
+          value: this.props.selectedCostume.title,
           valid: true
         },
         image: {
-          ...prevState.postForm.image,
-          value: this.props.selectedPost.imagePath,
+          ...prevState.costumeForm.imageUrl,
+          value: this.props.selectedCostume.imageUrl,
           valid: true
         },
-        content: {
-          ...prevState.postForm.content,
-          value: this.props.selectedPost.content,
+        description: {
+          ...prevState.costumeForm.description,
+          value: this.props.selectedCostume.description,
           valid: true
         }
       };
-      this.setState({ postForm: postForm, formIsValid: true });
+      this.setState({ costumeForm: costumeForm, formIsValid: true });
     }
   }
 
@@ -75,13 +93,13 @@ class FeedEdit extends Component {
     }
     this.setState(prevState => {
       let isValid = true;
-      for (const validator of prevState.postForm[input].validators) {
+      for (const validator of prevState.costumeForm[input].validators) {
         isValid = isValid && validator(value);
       }
       const updatedForm = {
-        ...prevState.postForm,
+        ...prevState.costumeForm,
         [input]: {
-          ...prevState.postForm[input],
+          ...prevState.costumeForm[input],
           valid: isValid,
           value: files ? files[0] : value
         }
@@ -91,7 +109,7 @@ class FeedEdit extends Component {
         formIsValid = formIsValid && updatedForm[inputName].valid;
       }
       return {
-        postForm: updatedForm,
+        costumeForm: updatedForm,
         formIsValid: formIsValid
       };
     });
@@ -100,10 +118,10 @@ class FeedEdit extends Component {
   inputBlurHandler = input => {
     this.setState(prevState => {
       return {
-        postForm: {
-          ...prevState.postForm,
+        costumeForm: {
+          ...prevState.costumeForm,
           [input]: {
-            ...prevState.postForm[input],
+            ...prevState.costumeForm[input],
             touched: true
           }
         }
@@ -111,23 +129,26 @@ class FeedEdit extends Component {
     });
   };
 
-  cancelPostChangeHandler = () => {
+  cancelCostumeChangeHandler = () => {
     this.setState({
-      postForm: POST_FORM,
+      costumeForm: COSTUME_FORM,
       formIsValid: false
     });
     this.props.onCancelEdit();
   };
 
-  acceptPostChangeHandler = () => {
-    const post = {
-      title: this.state.postForm.title.value,
-      image: this.state.postForm.image.value,
-      content: this.state.postForm.content.value
+  acceptCostumeChangeHandler = () => {
+    const costume = {
+      category: this.state.costumeForm.category.value,
+      name: this.state.costumeForm.title.value,
+      rentalFee: this.state.costumeForm.rentalFee.value,
+      size: this.state.costumeForm.size.value,
+      imageUrl: this.state.costumeForm.imageUrl.value,
+      description: this.state.costumeForm.description.value
     };
-    this.props.onFinishEdit(post);
+    this.props.onFinishEdit(costume);
     this.setState({
-      postForm: POST_FORM,
+      costumeForm: COSTUME_FORM,
       formIsValid: false,
       imagePreview: null
     });
@@ -146,23 +167,43 @@ class FeedEdit extends Component {
         >
           <form>
             <Input
-              id="title"
-              label="Title"
+              id="category"
+              label="Category"
               control="input"
               onChange={this.postInputChangeHandler}
-              onBlur={this.inputBlurHandler.bind(this, 'title')}
-              valid={this.state.postForm['title'].valid}
-              touched={this.state.postForm['title'].touched}
-              value={this.state.postForm['title'].value}
+              onBlur={this.inputBlurHandler.bind(this, 'category')}
+              valid={this.state.postForm['category'].valid}
+              touched={this.state.postForm['category'].touched}
+              value={this.state.postForm['category'].value}
+            />
+            <Input
+              id="name"
+              label="Name"
+              control="input"
+              onChange={this.postInputChangeHandler}
+              onBlur={this.inputBlurHandler.bind(this, 'name')}
+              valid={this.state.postForm['name'].valid}
+              touched={this.state.postForm['name'].touched}
+              value={this.state.postForm['name'].value}
+            />
+            <Input
+              id="rentalFee"
+              label="Rental Fee"
+              control="input"
+              onChange={this.postInputChangeHandler}
+              onBlur={this.inputBlurHandler.bind(this, 'rentalFee')}
+              valid={this.state.postForm['rentalFee'].valid}
+              touched={this.state.postForm['rentalFee'].touched}
+              value={this.state.postForm['rentalFee'].value}
             />
             <FilePicker
-              id="image"
-              label="Image"
+              id="imageUrl"
+              label="Image URL"
               control="input"
               onChange={this.postInputChangeHandler}
-              onBlur={this.inputBlurHandler.bind(this, 'image')}
-              valid={this.state.postForm['image'].valid}
-              touched={this.state.postForm['image'].touched}
+              onBlur={this.inputBlurHandler.bind(this, 'imageUrl')}
+              valid={this.state.postForm['imageUrl'].valid}
+              touched={this.state.postForm['imageUrl'].touched}
             />
             <div className="new-post__preview-image">
               {!this.state.imagePreview && <p>Please choose an image.</p>}
@@ -171,15 +212,15 @@ class FeedEdit extends Component {
               )}
             </div>
             <Input
-              id="content"
-              label="Content"
+              id="description"
+              label="Description"
               control="textarea"
               rows="5"
               onChange={this.postInputChangeHandler}
-              onBlur={this.inputBlurHandler.bind(this, 'content')}
-              valid={this.state.postForm['content'].valid}
-              touched={this.state.postForm['content'].touched}
-              value={this.state.postForm['content'].value}
+              onBlur={this.inputBlurHandler.bind(this, 'description')}
+              valid={this.state.postForm['description'].valid}
+              touched={this.state.postForm['description'].touched}
+              value={this.state.postForm['description'].value}
             />
           </form>
         </Modal>
@@ -188,5 +229,5 @@ class FeedEdit extends Component {
   }
 }
 
-export default FeedEdit;
+export default CostumeEdit;
 
