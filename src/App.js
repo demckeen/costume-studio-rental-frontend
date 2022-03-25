@@ -13,6 +13,10 @@ import SingleCostumePage from './pages/Costume/SingleCostume/SingleCostume';
 import LoginPage from './pages/Auth/Login';
 import SignupPage from './pages/Auth/Signup';
 import './App.css';
+import NewPassword from './pages/Auth/NewPassword';
+
+const sendgrid = require('@sendgrid/mail');
+sendgrid.setApiKey( process.env.SENDGRID_API_KEY );
 
 class App extends Component {
   state = {
@@ -152,6 +156,39 @@ class App extends Component {
       });
   };
 
+  setNewPasswordHandler = (event, passwordvar) => {
+    event.preventDefault();
+    let url = 'http://localhost:8080/auth/new-password';
+    let method = 'POST';
+    let newpassword = passwordvar.password;
+    let passToken = passwordvar.passToken;
+    fetch(url, {
+      method: method,
+      body: JSON.stringify({
+        password: newpassword
+      }), 
+      headers: {
+        Authorization: 'Bearer ' + passToken,
+        'Content-type':'application/json'
+      }
+      
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error('Setting new password failed!');
+        }
+        return res.json();
+      })
+      .then(resData => {
+        console.log(resData);
+        this.props.history.replace('/login');
+        })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+
   cartHandler = (event, reqId) => {
     const token = localStorage.getItem('token');
     fetch('http://localhost:8080/costume/cart/', {
@@ -228,6 +265,15 @@ class App extends Component {
               <SingleCostumePage
                 {...props}
                 onCart={this.cartHandler}
+              />
+            )}
+          />
+          <Route
+            path="/newpassword/:token"
+            render={props => (
+              <NewPassword
+                {...props}
+                onFinishPassword={this.setNewPasswordHandler}
               />
             )}
           />
