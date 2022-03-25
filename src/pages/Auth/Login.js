@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 
+import ResetPassword from './ResetPassword';
 import Input from '../../components/Form/Input/Input';
 import Button from '../../components/Button/Button';
 import { required, length, email } from '../../util/validators';
 import Auth from './Auth';
+import sendgridTransport from 'nodemailer-sendgrid-transport';
 
 class Login extends Component {
   state = {
+    isEditing: false,
     loginForm: {
       email: {
         value: '',
@@ -63,6 +66,61 @@ class Login extends Component {
     });
   };
 
+  startResetHandler = () => {
+    this.setState({ isEditing: true });
+  };
+
+  cancelResetHandler = () => {
+    this.setState({ isEditing: false, editPost: null });
+  };
+
+  finishResetHandler = email => {
+    this.setState({ isEditing: true });
+    console.log(email)
+    fetch('http://localhost:8080/auth/reset', {
+      method: "POST",
+      body: JSON.stringify({ email: email }),
+      headers: {
+        'Content-Type':'application/json'
+      }
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error('Resetting password failed!');
+        }
+        return res.json();
+      })
+      .then(resData => {
+        console.log(resData);
+        const token = resData.token;
+        this.setState({isEditing: false});
+        sendgridTransport.sendMail({
+          to: email,
+          from: 'danamckeen@gmail.com',
+          subject: 'Your Password',
+          html: `
+              <p>You requested a password reset.</p> 
+              <p>Click this <a href="http://localhost:3000/reset/${token}" >link</a> 
+              to set a new password.</p>`
+              
+              // `<p>Click this <a href="http://localhost:3000/reset/${token}" >link</a> 
+              // to set a new password.</p>`    
+      });
+      })
+      .catch(err => {
+        console.log(err);
+        // this.setState({ costumesLoading: false });
+      });
+  };
+
+  errorHandler = () => {
+    this.setState({ error: null });
+  };
+
+  catchError = error => {
+    this.setState({ error: error });
+  };
+
   render() {
     return (
       <Auth>
@@ -100,6 +158,19 @@ class Login extends Component {
             Login
           </Button>
         </form>
+        <div className='passwordReset'>
+            <ResetPassword
+                editing={this.state.isEditing}
+                loading={this.state.editLoading}
+                onCancelReset={this.cancelResetHandler}
+                onFinishReset={this.finishResetHandler}
+              />
+            <section className="feed__control">
+              <Button mode="raised" design="accent" onClick={this.startResetHandler}>
+                Reset Password
+              </Button>
+            </section>
+          </div>
       </Auth>
     );
   }
