@@ -15,9 +15,6 @@ import SignupPage from './pages/Auth/Signup';
 import './App.css';
 import NewPassword from './pages/Auth/NewPassword';
 
-const sendgrid = require('@sendgrid/mail');
-sendgrid.setApiKey( process.env.SENDGRID_API_KEY );
-
 class App extends Component {
   state = {
     showBackdrop: false,
