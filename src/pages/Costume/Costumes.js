@@ -59,7 +59,7 @@ class Costumes extends Component {
       page--;
       this.setState({ costumePage: page });
     }
-    fetch('http://localhost:8080/costume/costumes?page=' + page, {
+    fetch('http://localhost:8080/costumes?page=' + page, {
     })
     .then(res => {
       if (res.status !== 200) {
