@@ -154,7 +154,7 @@ class App extends Component {
 
   cartHandler = (event, reqId) => {
     const token = localStorage.getItem('token');
-    fetch('http://localhost:8080/costume/cart/', {
+    fetch('http://localhost:8080/cart/', {
       method: 'POST',
       body: {
  
