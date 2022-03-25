@@ -81,7 +81,7 @@ class CostumeEdit extends Component {
           value: this.props.selectedCostume.size,
           valid: true
         },
-        image: {
+        imageUrl: {
           ...prevState.costumeForm.imageUrl,
           value: this.props.selectedCostume.imageUrl,
           valid: true
