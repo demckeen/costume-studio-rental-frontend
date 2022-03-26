@@ -24,6 +24,9 @@ const navigationItems = props => [
       <li className={["navigation-item", props.mobile ? 'mobile' : '']} key={props.mobile ? `mobileloggedIncostumes` : 'loggedIncostumes'}>
         <NavLink to={'/costumes'} key={props.mobile ? `mobileLinkCostumes` : 'linkCostumes'}>Costumes</NavLink>
       </li>
+      <li className={["navigation-item", props.mobile ? 'mobile' : '']} key={props.mobile ? `mobileCart` : 'cart'}>
+        <NavLink to={'/cart'} key={props.mobile ? `mobileLinkCart` : 'linkCart'}>Cart</NavLink>
+      </li>
       <li className="navigation-item" key={props.mobile ? `mobilelogout` : 'logout'}>
         <button onClick={props.onLogout}>Logout</button>
       </li>

@@ -8,12 +8,14 @@ import MainNavigation from './components/Navigation/MainNavigation/MainNavigatio
 import MobileNavigation from './components/Navigation/MobileNavigation/MobileNavigation';
 import ErrorHandler from './components/ErrorHandler/ErrorHandler';
 import CostumesPage from './pages/Costume/Costumes';
+import Checkout from './pages/Rental/Checkout';
 import HomePage from './pages/Home/Home';
 import SingleCostumePage from './pages/Costume/SingleCostume/SingleCostume';
 import LoginPage from './pages/Auth/Login';
 import SignupPage from './pages/Auth/Signup';
 import './App.css';
 import NewPassword from './pages/Auth/NewPassword';
+import Cart from './pages/Rental/Cart';
 
 class App extends Component {
   state = {
@@ -274,6 +276,35 @@ class App extends Component {
               />
             )}
           />
+          <Route
+            path="/checkout/success"
+            exact
+            render={props => (
+              <Checkout
+                {...props}
+                success={ true }
+                userId={localStorage.getItem('userId')}
+                client_secret={this.props.client_secret}
+                isAuth={localStorage.getItem('isAuth')}
+                isAdmin={this.state.isAdmin}
+                onCart={this.cartHandler}
+              />
+            )}
+          />
+          <Route
+            path="/checkout/cancel"
+            exact
+            render={props => (
+              <Checkout
+              success={ true }
+              userId={localStorage.getItem('userId')}
+              client_secret={this.props.client_secret}
+              isAuth={localStorage.getItem('isAuth')}
+              isAdmin={this.state.isAdmin}
+              onCart={this.cartHandler}
+              />
+            )}
+          />
         <Redirect to="/" />
       </Switch>
     );
@@ -304,6 +335,20 @@ class App extends Component {
             exact
             render={props => (
               <SingleCostumePage
+                {...props}
+                userId={this.state.userId}
+                token={this.state.token}
+                isAuth={this.state.isAuth}
+                isAdmin={this.state.isAdmin}
+                onCart={this.cartHandler}
+              />
+            )}
+          />
+          <Route
+            path="/cart"
+            exact
+            render={props => (
+              <Cart
                 {...props}
                 userId={this.state.userId}
                 token={this.state.token}
