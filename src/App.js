@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
-
 import Layout from './components/Layout/Layout';
 import Backdrop from './components/Backdrop/Backdrop';
 import Toolbar from './components/Toolbar/Toolbar';
@@ -30,6 +29,10 @@ class App extends Component {
   };
 
   componentDidMount() {
+    const queryString = require('query-string');
+
+    const queryParsed = queryString.parse(this.props.location.search);
+
     const token = localStorage.getItem('token');
     const expiryDate = localStorage.getItem('expiryDate');
     if (!token || !expiryDate) {
@@ -45,6 +48,7 @@ class App extends Component {
       new Date(expiryDate).getTime() - new Date().getTime();
     this.setState({ isAuth: true, token: token, userId: userId, isAdmin: isAdmin });
     this.setAutoLogout(remainingMilliseconds);
+    this.setState({queryParam: queryParsed})
   }
 
   mobileNavHandler = isOpen => {
@@ -277,8 +281,7 @@ class App extends Component {
             )}
           />
           <Route
-            path="/checkout/success"
-            exact
+            path='/checkout/success'
             render={props => (
               <Checkout
                 {...props}
@@ -288,6 +291,7 @@ class App extends Component {
                 isAuth={localStorage.getItem('isAuth')}
                 isAdmin={this.state.isAdmin}
                 onCart={this.cartHandler}
+                queryParam={this.state.queryParam}
               />
             )}
           />
