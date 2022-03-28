@@ -7,8 +7,8 @@ import MainNavigation from './components/Navigation/MainNavigation/MainNavigatio
 import MobileNavigation from './components/Navigation/MobileNavigation/MobileNavigation';
 import ErrorHandler from './components/ErrorHandler/ErrorHandler';
 import CostumesPage from './pages/Costume/Costumes';
-import Checkout from './pages/Rental/Checkout';
-import HomePage from './pages/Home/Home';
+import SingleOrder from './pages/Rental/SingleOrder/SingleOrder';
+import Rentals from './pages/Rental/Rentals';
 import SingleCostumePage from './pages/Costume/SingleCostume/SingleCostume';
 import LoginPage from './pages/Auth/Login';
 import SignupPage from './pages/Auth/Signup';
@@ -280,35 +280,6 @@ class App extends Component {
               />
             )}
           />
-          <Route
-            path='/checkout/success'
-            render={props => (
-              <Checkout
-                {...props}
-                success={ true }
-                userId={localStorage.getItem('userId')}
-                client_secret={this.props.client_secret}
-                isAuth={localStorage.getItem('isAuth')}
-                isAdmin={this.state.isAdmin}
-                onCart={this.cartHandler}
-                queryParam={this.state.queryParam}
-              />
-            )}
-          />
-          <Route
-            path="/checkout/cancel"
-            exact
-            render={props => (
-              <Checkout
-              success={ true }
-              userId={localStorage.getItem('userId')}
-              client_secret={this.props.client_secret}
-              isAuth={localStorage.getItem('isAuth')}
-              isAdmin={this.state.isAdmin}
-              onCart={this.cartHandler}
-              />
-            )}
-          />
         <Redirect to="/" />
       </Switch>
     );
@@ -319,7 +290,12 @@ class App extends Component {
             path="/"
             exact
             render={props => (
-              <HomePage userId={this.state.userId} token={this.state.token} isAuth={this.state.isAuth} />
+              <CostumesPage
+              {...props}
+              userId={this.state.userId} token={this.state.token}
+              isAuth={this.state.isAuth}
+              isAdmin={this.state.isAdmin}
+              />
             )}
           />
           <Route
@@ -362,29 +338,35 @@ class App extends Component {
               />
             )}
           />
-          <Redirect to="/" 
-            exact
-            render={props => (
-            <HomePage userId={this.state.userId} token={this.state.token} isAuth={this.state.isAuth} 
-            isAdmin={this.state.isAdmin} />)}
-          />
-        </Switch>
-      );
-    }
-
-    if (this.state.isAdmin) {
-      routes = (
-        <Switch>
           <Route
-            path="/"
+            path="/rentals"
             exact
             render={props => (
-              <HomePage userId={this.state.userId} token={this.state.token} isAuth={this.state.isAuth}
-              isAdmin={this.state.isAdmin} />
+              <Rentals
+                {...props}
+                userId={this.state.userId}
+                token={this.state.token}
+                isAuth={this.state.isAuth}
+                isAdmin={this.state.isAdmin}
+                onCart={this.cartHandler}
+              />
             )}
           />
           <Route
-            path="/costumes"
+            path="/rental/:rentalId"
+            exact
+            render={props => (
+              <SingleOrder
+                {...props}
+                userId={this.state.userId}
+                token={this.state.token}
+                isAuth={this.state.isAuth}
+                isAdmin={this.state.isAdmin}
+                onCart={this.cartHandler}
+              />
+            )}
+          />
+          <Redirect to="/" 
             exact
             render={props => (
               <CostumesPage
@@ -394,65 +376,6 @@ class App extends Component {
               isAdmin={this.state.isAdmin}
               />
             )}
-          />
-          <Route
-            path="/costumes/:costumeId"
-            exact
-            render={props => (
-              <SingleCostumePage
-                {...props}
-                userId={this.state.userId}
-                token={this.state.token}
-                isAuth={this.state.isAuth}
-                isAdmin={this.state.isAdmin}
-                onCart={this.cartHandler}
-              />
-            )}
-          />
-          <Route
-            path="/costumes/admin/edit/:costumeId"
-            render={props => (
-              <SingleCostumePage
-                {...props}
-                userId={this.state.userId}
-                token={this.state.token}
-                isAuth={this.state.isAuth}
-                isAdmin={this.state.isAdmin}
-                onCart={this.cartHandler}
-              />
-            )}
-          />
-          <Route
-            path="/costumes/admin/delete/:costumeId"
-            render={props => (
-              <SingleCostumePage
-                {...props}
-                userId={this.state.userId}
-                token={this.state.token}
-                isAuth={this.state.isAuth}
-                isAdmin={this.state.isAdmin}
-                onCart={this.cartHandler}
-              />
-            )}
-          />
-          <Route
-            path="/costumes/admin/add-costume"
-            render={props => (
-              <SingleCostumePage
-                {...props}
-                userId={this.state.userId}
-                token={this.state.token}
-                isAuth={this.state.isAuth}
-                isAdmin={this.state.isAdmin}
-                onCart={this.cartHandler}
-              />
-            )}
-          />
-          <Redirect to="/" 
-            exact
-            render={props => (
-            <HomePage userId={this.state.userId} token={this.state.token} isAuth={this.state.isAuth} 
-            isAdmin={this.state.isAdmin} />)}
           />
         </Switch>
       );
@@ -470,6 +393,7 @@ class App extends Component {
                 onOpenMobileNav={this.mobileNavHandler.bind(this, true)}
                 onLogout={this.logoutHandler}
                 isAuth={this.state.isAuth}
+                isAdmin={this.state.isAdmin}
               />
             </Toolbar>
           }
@@ -480,6 +404,7 @@ class App extends Component {
               onChooseItem={this.mobileNavHandler.bind(this, false)}
               onLogout={this.logoutHandler}
               isAuth={this.state.isAuth}
+              isAdmin={this.state.isAdmin}
             />
           }
         />
