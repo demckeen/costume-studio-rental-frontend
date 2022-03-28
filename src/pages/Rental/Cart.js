@@ -22,18 +22,13 @@ class Cart extends Component {
   componentDidMount() {
 
     this.loadCart();
-    // const socket = openSocket('http://localhost:8080');
-    // socket.on('cart', data => {
-    //   if(data.action === 'change') {
-    //     this.addCostume(data.costume);
-    //   }
-    // })
+
   }
 
   removeCostume = costumeIdv => {
     this.setState({cartLoading: true});
     console.log(costumeIdv);
-    fetch('http://localhost:8080/cancel-rental', {
+    fetch('http://costume-studio-rental.herokuapp.com/cancel-rental', {
       method: 'DELETE', 
       body: JSON.stringify({ costumeId: costumeIdv }),
       headers: {
@@ -54,7 +49,7 @@ class Cart extends Component {
 
   loadCart = () => {
     this.setState({cartLoading: true});
-    fetch('http://localhost:8080/cart', {
+    fetch('http://costume-studio-rental.herokuapp.com/cart', {
       method: 'GET', 
       headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token')
@@ -91,7 +86,7 @@ class Cart extends Component {
 
   checkoutHandler = () => {
     this.setState({ isEditing: true });
-    fetch('http://localhost:8080/checkout', {
+    fetch('http://costume-studio-rental.herokuapp.com/checkout', {
       method: 'GET', 
       headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token')
