@@ -247,12 +247,7 @@ class Costumes extends Component {
             <p style={{ textAlign: 'center' }}>No costumes found.</p>
           ) : null}
           {!this.state.costumesLoading && (
-            <Paginator
-              onPrevious={this.loadCostumes.bind(this, 'previous')}
-              onNext={this.loadCostumes.bind(this, 'next')}
-              lastPage={Math.ceil(this.state.totalCostumes / 2)}
-              currentPage={this.state.costumePage}
-            >
+            <div className="costumesContainer">
               {this.state.costumes.map(costume => (
                 <Costume
                   key={costume._id + Math.random()}
@@ -270,7 +265,13 @@ class Costumes extends Component {
                   onDelete={this.deleteCostumeHandler.bind(this, costume._id)}
                 />
               ))}
-            </Paginator>
+            <Paginator
+              onPrevious={this.loadCostumes.bind(this, 'previous')}
+              onNext={this.loadCostumes.bind(this, 'next')}
+              lastPage={Math.ceil(this.state.totalCostumes / 2)}
+              currentPage={this.state.costumePage}
+            ></Paginator>
+            </div>
           )}
         </section>
       </Fragment>

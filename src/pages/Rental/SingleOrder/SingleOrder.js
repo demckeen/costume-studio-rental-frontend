@@ -66,8 +66,8 @@ class SingleOrder extends Component {
         
          return  month + '/' + day + '/' + year;}
         
-        const orderDate = createDate(props.orderDate);
-        const returnDate = createDate(props.returnDate);
+        const orderDate = createDate(resData.rental.orderDate);
+        const returnDate = createDate(resData.rental.returnDate);
 
       this.setState({
         orderItems: resData.rental.costumes,
@@ -105,7 +105,7 @@ class SingleOrder extends Component {
             <p style={{ textAlign: 'center' }}>No costumes in cart.</p>
           ) : null}
           {!this.state.rentalLoading && (
-            <div className="cartContainer">
+            <div className="orderContainer">
               {this.state.orderItems.map(costume => (
                 <OrderItem                  
                   key={costume.costume._id + Math.random()}
@@ -124,10 +124,20 @@ class SingleOrder extends Component {
                   isAdmin={this.state.isAdmin}
                 />
               ))}
-              <div className="cartTotal">
-                <p className="cartLabel total">Total:</p>
-                <p className="cartValue total">${this.state.rentalTotal}.00</p>
-              </div> 
+              <div className="rentalInfo">
+                <div className="orderDate">
+                  <p className="cartLabel total">Order Date:</p>
+                  <p className="cartValue total">{this.state.orderDate}</p>
+                </div> 
+                <div className="returnDate">
+                  <p className="cartLabel total">Return Date:</p>
+                  <p className="cartValue total">{this.state.returnDate}</p>
+                </div> 
+                <div className="cartTotal">
+                  <p className="cartLabel total">Total:</p>
+                  <p className="cartValue total">${this.state.rentalTotal}.00</p>
+                </div> 
+              </div>
             </div>
           )}
         </section>
