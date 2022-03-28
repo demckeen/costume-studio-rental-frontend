@@ -7,14 +7,14 @@ import MainNavigation from './components/Navigation/MainNavigation/MainNavigatio
 import MobileNavigation from './components/Navigation/MobileNavigation/MobileNavigation';
 import ErrorHandler from './components/ErrorHandler/ErrorHandler';
 import CostumesPage from './pages/Costume/Costumes';
-import SingleOrder from './pages/Rental/SingleOrder/SingleOrder';
-import Rentals from './pages/Rental/Rentals';
+import SingleOrderPage from './pages/Rental/SingleOrder/SingleOrder';
+import RentalsPage from './pages/Rental/Rentals';
 import SingleCostumePage from './pages/Costume/SingleCostume/SingleCostume';
 import LoginPage from './pages/Auth/Login';
 import SignupPage from './pages/Auth/Signup';
 import './App.css';
 import NewPassword from './pages/Auth/NewPassword';
-import Cart from './pages/Rental/Cart';
+import CartPage from './pages/Rental/Cart';
 
 class App extends Component {
   state = {
@@ -64,6 +64,8 @@ class App extends Component {
     localStorage.removeItem('token');
     localStorage.removeItem('expiryDate');
     localStorage.removeItem('userId');
+    localStorage.removeItem('isAdmin');
+    localStorage.removeItem('isAuth')
   };
 
   loginHandler = (event, authData) => {
@@ -280,7 +282,15 @@ class App extends Component {
               />
             )}
           />
-        <Redirect to="/" />
+        <Redirect to="/" 
+          // render={props => (
+          //   <LoginPage
+          //     {...props}
+          //     onLogin={this.loginHandler}
+          //     loading={this.state.authLoading}
+          //   />
+          // )}
+        />
       </Switch>
     );
     if (this.state.isAuth) {
@@ -328,7 +338,7 @@ class App extends Component {
             path="/cart"
             exact
             render={props => (
-              <Cart
+              <CartPage
                 {...props}
                 userId={this.state.userId}
                 token={this.state.token}
@@ -342,7 +352,7 @@ class App extends Component {
             path="/rentals"
             exact
             render={props => (
-              <Rentals
+              <RentalsPage
                 {...props}
                 userId={this.state.userId}
                 token={this.state.token}
@@ -356,7 +366,7 @@ class App extends Component {
             path="/rental/:rentalId"
             exact
             render={props => (
-              <SingleOrder
+              <SingleOrderPage
                 {...props}
                 userId={this.state.userId}
                 token={this.state.token}
@@ -371,9 +381,8 @@ class App extends Component {
             render={props => (
               <CostumesPage
               {...props}
-              userId={this.state.userId} token={this.state.token}
-              isAuth={this.state.isAuth}
-              isAdmin={this.state.isAdmin}
+              isAdmin={false}
+              isAuth={false}
               />
             )}
           />

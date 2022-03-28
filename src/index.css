@@ -4,4 +4,9 @@
 
 body {
   font-family: sans-serif;
+  background-color: #e7d3c5;
+}
+
+main.content {
+  margin: 1.25rem;
 }

@@ -82,7 +82,7 @@ class Rentals extends Component {
             <p style={{ textAlign: 'center' }}>No orders found.</p>
           ) : null}
           {!this.state.costumesLoading && (
-            <div className="cartContainer">
+            <div className="rentalsContainer">
               {this.state.rentalOrders.map(rental => (
                 <RentalOrder
                   key={rental._id + Math.random()}

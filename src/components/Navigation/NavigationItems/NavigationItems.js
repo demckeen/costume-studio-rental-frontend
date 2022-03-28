@@ -34,11 +34,6 @@ const navigationItems = props => [
         <button onClick={props.onLogout}>Logout</button>
       </li>
     </ul>
-  ),
-  props.isAdmin && (
-    <li className={["navigation-item", props.mobile ? 'mobile' : '']} key={props.mobile ? `mobileadmin` : 'admin'}>
-      <NavLink to={'/admin'}>Admin</NavLink>
-    </li>
   )
 ];
 

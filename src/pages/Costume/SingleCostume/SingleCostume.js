@@ -8,8 +8,8 @@ class SingleCostume extends Component {
   state = {
     id: '',
     category: '',
-    name: '',
     rentalFee: '',
+    customeName:'',
     size: '',
     image: '',
     description: '',
@@ -42,7 +42,7 @@ class SingleCostume extends Component {
         }
         this.setState({
           id: resData.costume._id,
-          name: resData.costume.name,
+          costumeName: resData.costume.costumeName,
           category: resData.costume.category,
           rentalFee: resData.costume.rentalFee,
           size: resData.costume.size,
@@ -92,8 +92,8 @@ class SingleCostume extends Component {
   render() {
     return (
       <section className="single-post">
-        <h1>{this.state.name}</h1>
-        <h2>
+        <h1 className="costumeTitle">{this.state.costumeName}</h1>
+        <h2 className="costumeSubhead"> 
           {this.state.category} - {this.state.size}
         </h2>
         <h3>${this.state.rentalFee}.00</h3>
@@ -101,11 +101,12 @@ class SingleCostume extends Component {
           <Image contain imageUrl={this.state.image} />
         </div>
         <p>{this.state.description}</p>
-        {this.state.isAuth ? <CostumeButton onClick={this.addCartHandler.bind(this, this.state.id)}>Add to Cart</CostumeButton> : ''}
-        {this.state.isAdmin ? 
+        {(this.state.isAuth && ! this.state.isAdmin) ? <CostumeButton onClick={this.addCartHandler.bind(this, this.state.id)}>Add to Cart</CostumeButton> : ''}
+        {(this.state.isAdmin && this.state.isAuth) ? 
           <div className='adminActions'>
+            <CostumeButton onClick={this.addCartHandler.bind(this, this.state.id)}>Add to Cart</CostumeButton>
             <AdminButton mode='flat' link={'admin/edit/' + this.state.id}>Edit Costume</AdminButton>
-            <AdminButton mode='flat' link={'admin/delete/' + this.state.id}>Delete Costume</AdminButton>
+            <AdminButton mode='flat' design='danger' link={'admin/delete/' + this.state.id}>Delete Costume</AdminButton>
           </div> : ''}
       </section>
     );
