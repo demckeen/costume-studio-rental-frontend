@@ -35,6 +35,15 @@
   padding: 0;
 }
 
+.navigation-item.mobile button {
+  font: inherit;
+  background: transparent;
+  border: none;
+  color: #3b0062;
+  cursor: pointer;
+  padding: 0;
+}
+
 .navigation-item button:hover,
 .navigation-item button:active {
   color: #fab83f;
