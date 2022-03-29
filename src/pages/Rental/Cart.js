@@ -28,7 +28,7 @@ class Cart extends Component {
   removeCostume = costumeIdv => {
     this.setState({cartLoading: true});
     console.log(costumeIdv);
-    fetch('http://costume-studio-rental.herokuapp.com/cancel-rental', {
+    fetch('https://costume-studio-rental.herokuapp.com/cancel-rental', {
       method: 'DELETE', 
       body: JSON.stringify({ costumeId: costumeIdv }),
       headers: {
@@ -49,7 +49,7 @@ class Cart extends Component {
 
   loadCart = () => {
     this.setState({cartLoading: true});
-    fetch('http://costume-studio-rental.herokuapp.com/cart', {
+    fetch('https://costume-studio-rental.herokuapp.com/cart', {
       method: 'GET', 
       headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token')
@@ -86,7 +86,7 @@ class Cart extends Component {
 
   checkoutHandler = () => {
     this.setState({ isEditing: true });
-    fetch('http://costume-studio-rental.herokuapp.com/checkout', {
+    fetch('https://costume-studio-rental.herokuapp.com/checkout', {
       method: 'GET', 
       headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token')
