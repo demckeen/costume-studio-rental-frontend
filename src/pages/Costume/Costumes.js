@@ -114,14 +114,17 @@ class Costumes extends Component {
     
     let url = 'https://costume-studio-rental.herokuapp.com/admin/add-costume';
     let method = 'POST';
+    let body = JSON.stringify(Object.fromEntries(formData));
+    
     if (this.state.editCostume) {
-      url = 'https://costume-studio-rental.herokuapp.com/admin/edit-costume/' + this.state.editCostume._id;
+      url = 'https://costume-studio-rental.herokuapp.com/admin/edit-costume/';
       method = 'PUT';
+      body = (JSON.stringify(Object.fromEntries(formData), this.state.editCostume._id), JSON.stringify({costumeId: this.state.editCostume._id}));
     }
 
     fetch(url, {
       method: method,
-      body: JSON.stringify(Object.fromEntries(formData)), 
+      body: body, 
       headers: {
         Authorization: 'Bearer ' + this.props.token,
         'Content-Type': 'application/json'
