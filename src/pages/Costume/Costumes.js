@@ -87,7 +87,7 @@ class Costumes extends Component {
 
   startEditCostumeHandler = costumeId => {
     this.setState(prevState => {
-      const loadedCostume = { ...prevState.costumes.find(c => c._d === costumeId) };
+      const loadedCostume = { ...prevState.costumes.find(c => c._id === costumeId) };
 
       return {
         isEditing: true,
