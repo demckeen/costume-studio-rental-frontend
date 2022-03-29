@@ -145,7 +145,7 @@ class CostumeEdit extends Component {
   cancelCostumeChangeHandler = () => {
     this.setState({
       costumeForm: COSTUME_FORM,
-      formIsValid: false
+      formIsValid: false,
     });
     this.props.onCancelEdit();
   };
@@ -157,7 +157,8 @@ class CostumeEdit extends Component {
       rentalFee: this.state.costumeForm.rentalFee.value,
       size: this.state.costumeForm.size.value,
       imageUrl: this.state.costumeForm.imageUrl.value,
-      description: this.state.costumeForm.description.value
+      description: this.state.costumeForm.description.value,
+      costumeId: this.props.costumeId
     };
     this.props.onFinishEdit(costume);
     this.setState({
