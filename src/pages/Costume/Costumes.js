@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from 'react';
-import openSocket from 'socket.io-client';
 import Costume from '../../components/Costume/Costume/Costume';
 import CostumeEdit from '../../components/Costume/CostumeEdit/CostumeEdit';
 import Button from '../../components/Button/Button';
@@ -18,7 +17,7 @@ class Costumes extends Component {
     costumesLoading: true,
     editLoading: false,
     isAuth: false,
-    isAdmin: false,
+    isAdmin: false
   };
 
   componentDidMount() {
@@ -29,10 +28,10 @@ class Costumes extends Component {
   addCostume = costume => {
     this.setState(prevState => {
       const updatedCostumes = [...prevState.costumes];
-      if(prevState.costumePage === 1) {
+
         updatedCostumes.pop();
         updatedCostumes.unshift(costume);
-      }
+
       return {
         costumes: updatedCostumes,
         totalCostumes: prevState.totalCostumes +1
@@ -147,8 +146,18 @@ class Costumes extends Component {
           description: resData.costume.description,
           adminId: resData.costume.userId
         };
+        this.setState(prevState => {
+          const updatedCostumes = [...prevState.costumes];
+    
+            updatedCostumes.pop();
+            updatedCostumes.unshift(costume);
+    
+          return {
+            costumes: updatedCostumes,
+            totalCostumes: prevState.totalCostumes +1
+          };
+        });
         this.setState({
-            posts: updatedCostumes,
             isEditing: false,
             editCostume: null,
             editLoading: false
