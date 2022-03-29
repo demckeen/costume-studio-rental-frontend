@@ -120,7 +120,7 @@ class Costumes extends Component {
       url = 'https://costume-studio-rental.herokuapp.com/admin/edit-costume/';
       method = 'PUT';
       body = JSON.stringify({
-        description: costumeData.category,
+        category: costumeData.category,
         costumeName: costumeData.costumeName,
         size: costumeData.size,
         rentalFee: costumeData.rentalFee,
