@@ -8,7 +8,7 @@ class SingleOrder extends Component {
   state = {
     orderItems: [],
     rentalLoading: true,
-    orderDate: '',
+    rentalDate: '',
     returnDate: '',
     isAuth: false,
     isAdmin: false,
@@ -61,14 +61,14 @@ class SingleOrder extends Component {
         
          return  month + '/' + day + '/' + year;}
         
-        const orderDate = createDate(resData.rental.orderDate);
+        const rentalDate = createDate(resData.rental.rentalDate);
         const returnDate = createDate(resData.rental.returnDate);
 
       this.setState({
         orderItems: resData.rental.costumes,
         rentalLoading: false,
         rentalTotal: rentalTotal,
-        orderDate: orderDate,
+        rentalDate: rentalDate,
         returnDate: returnDate
       });
     })
@@ -113,16 +113,15 @@ class SingleOrder extends Component {
                   imageUrl={costume.costume.imageUrl}
                   description={costume.costume.description}
                   quantity={costume.quantity}
-                  orderDate={costume.orderDate}
                   rentalDate={costume.rentalDate}
                   isAuth={this.state.isAuth}
                   isAdmin={this.state.isAdmin}
                 />
               ))}
               <div className="rentalInfo">
-                <div className="orderDate">
-                  <p className="cartLabel total">Order Date:</p>
-                  <p className="cartValue total">{this.state.orderDate}</p>
+                <div className="rentalDate">
+                  <p className="cartLabel total">Rental Date:</p>
+                  <p className="cartValue total">{this.state.rentalDate}</p>
                 </div> 
                 <div className="returnDate">
                   <p className="cartLabel total">Return Date:</p>
