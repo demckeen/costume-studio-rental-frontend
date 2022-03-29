@@ -83,12 +83,12 @@ class Costumes extends Component {
   };
 
   newCostumeHandler = () => {
-    this.setState({ isEditing: true });
+    this.setState({ isEditing: false });
   };
 
   startEditCostumeHandler = costumeId => {
     this.setState(prevState => {
-      const loadedCostume = { ...prevState.costumes.find(c => c._id === costumeId) };
+      const loadedCostume = { ...prevState.costumes.find(c => c._d === costumeId) };
 
       return {
         isEditing: true,
@@ -115,8 +115,8 @@ class Costumes extends Component {
     
     let url = 'https://costume-studio-rental.herokuapp.com/admin/add-costume';
     let method = 'POST';
-    if (this.state.editPost) {
-      url = 'https://costume-studio-rental.herokuapp.com/admin/edit-costume/' + this.state.editCostume._id;
+    if (this.state.isEditing) {
+      url = 'https://costume-studio-rental.herokuapp.com/admin/edit-costume/' + this.props.id;
       method = 'PUT';
     }
 
@@ -147,20 +147,11 @@ class Costumes extends Component {
           description: resData.costume.description,
           adminId: resData.costume.userId
         };
-        this.setState(prevState => {
-          let updatedCostumes = [...prevState.costumes];
-          if (prevState.editCostume) {
-            const costumeIndex = prevState.costumes.findIndex(
-              c => c._id === prevState.editCostume._id
-            );
-            updatedCostumes[costumeIndex] = costume;
-          }
-          return {
+        this.setState({
             posts: updatedCostumes,
             isEditing: false,
             editCostume: null,
             editLoading: false
-          };
         });
       })
       .catch(err => {

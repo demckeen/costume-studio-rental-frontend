@@ -49,7 +49,8 @@ class CostumeEdit extends Component {
   state = {
     costumeForm: COSTUME_FORM,
     formIsValid: false,
-    imagePreview: null
+    imagePreview: null,
+    editing: '',
   };
 
   componentDidUpdate(prevProps, prevState) {
