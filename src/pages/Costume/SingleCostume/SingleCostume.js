@@ -20,7 +20,7 @@ class SingleCostume extends Component {
 
   componentDidMount() {
     const costumeId = this.props.match.params.costumeId;
-    fetch('http://localhost:8080/costumes/' + costumeId, {
+    fetch('https://costume-studio-rental.herokuapp.com/costumes/' + costumeId, {
       headers: {
         Authorization: 'Bearer ' + localStorage.getItem('token')
       }
@@ -58,7 +58,7 @@ class SingleCostume extends Component {
 
   addCartHandler = (event, reqId) => {
     const token = localStorage.getItem('token');
-    fetch('http://localhost:8080/cart/', {
+    fetch('https://costume-studio-rental.herokuapp.com/cart/', {
       method: 'POST',
       body: JSON.stringify({
         costumeId: this.state.id,
