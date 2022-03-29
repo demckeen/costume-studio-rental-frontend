@@ -10,9 +10,9 @@ export default function RentalOrder(props) {
   const month = dateData.getMonth();
   const day = dateData.getDate();
   
-   return  month + '/' + day + '/' + year;}
+   return  ( month + 1 ) + '/' + day + '/' + year;}
   
-  const orderDate = createDate(props.rentalDate);
+  const orderDate = createDate(props.orderDate);
   const returnDate = createDate(props.returnDate);
 
   return (

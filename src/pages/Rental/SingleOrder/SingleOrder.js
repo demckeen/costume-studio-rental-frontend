@@ -59,9 +59,9 @@ class SingleOrder extends Component {
         const month = dateData.getMonth();
         const day = dateData.getDate();
         
-         return  month + '/' + day + '/' + year;}
+         return ( month + 1 ) + '/' + day + '/' + year;}
         
-        const orderDate = createDate(resData.rental.orderDate);
+        const orderDate = createDate(resData.rental.rentalDate);
         const returnDate = createDate(resData.rental.returnDate);
 
       this.setState({
