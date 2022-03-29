@@ -115,7 +115,7 @@ class Costumes extends Component {
     let url = 'https://costume-studio-rental.herokuapp.com/admin/add-costume';
     let method = 'POST';
     if (this.state.isEditing) {
-      url = 'https://costume-studio-rental.herokuapp.com/admin/edit-costume/' + this.state.editCostume._id;
+      url = 'https://costume-studio-rental.herokuapp.com/admin/edit-costume/' + costumeData.costumeId;
       method = 'PUT';
     }
 
