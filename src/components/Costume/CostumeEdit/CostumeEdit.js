@@ -153,6 +153,14 @@ class CostumeEdit extends Component {
   };
 
   acceptCostumeChangeHandler = () => {
+
+    let costumeId;
+    if(this.state.selectedCostume) {
+      costumeId = this.selectedCostume._id;
+    }
+    else {
+      costumeID = '';
+    }
     const costume = {
       category: this.state.costumeForm.category.value,
       costumeName: this.state.costumeForm.costumeName.value,
@@ -160,7 +168,7 @@ class CostumeEdit extends Component {
       size: this.state.costumeForm.size.value,
       imageUrl: this.state.costumeForm.imageUrl.value,
       description: this.state.costumeForm.description.value,
-      costumeId: this.props.selectedCostume._id,
+      costumeId: costumeId
     };
     this.props.onFinishEdit(costume);
     this.setState({
