@@ -125,7 +125,7 @@ class Costumes extends Component {
       body: formData, 
       headers: {
         Authorization: 'Bearer ' + this.props.token,
-        'Content-Type':'application/json'
+        'Content-Type': 'application/json'
       }
       
     })
