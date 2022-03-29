@@ -119,7 +119,7 @@ class Costumes extends Component {
     if (this.state.editCostume) {
       url = 'https://costume-studio-rental.herokuapp.com/admin/edit-costume/';
       method = 'PUT';
-      body = (JSON.stringify(Object.fromEntries(formData), this.state.editCostume._id), JSON.stringify({costumeId: this.state.editCostume._id}));
+      body = (JSON.stringify(Object.fromEntries(formData)), JSON.stringify({costumeId: this.state.editCostume._id}));
     }
 
     fetch(url, {
