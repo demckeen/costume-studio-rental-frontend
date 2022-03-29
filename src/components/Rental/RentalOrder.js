@@ -12,7 +12,7 @@ export default function RentalOrder(props) {
   
    return  month + '/' + day + '/' + year;}
   
-  const orderDate = createDate(props.orderDate);
+  const orderDate = createDate(props.rentalDate);
   const returnDate = createDate(props.returnDate);
 
   return (
