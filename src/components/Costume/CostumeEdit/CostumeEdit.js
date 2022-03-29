@@ -97,15 +97,7 @@ class CostumeEdit extends Component {
   }
 
   postInputChangeHandler = (input, value, files) => {
-    if (files) {
-      generateBase64FromImage(files[0])
-        .then(b64 => {
-          this.setState({ imagePreview: b64 });
-        })
-        .catch(e => {
-          this.setState({ imagePreview: null });
-        });
-    }
+
     this.setState(prevState => {
       let isValid = true;
       for (const validator of prevState.costumeForm[input].validators) {
@@ -230,15 +222,6 @@ class CostumeEdit extends Component {
               touched={this.state.costumeForm['size'].touched}
               value={this.state.costumeForm['size'].value}
             />
-            {/* <FilePicker
-              id="imageUrl"
-              label="Image URL"
-              control="input"
-              onChange={this.postInputChangeHandler}
-              onBlur={this.inputBlurHandler.bind(this, 'imageUrl')}
-              valid={this.state.costumeForm['imageUrl'].valid}
-              touched={this.state.costumeForm['imageUrl'].touched}
-            /> */}
             <Input
               id="imageUrl"
               label="Image URL"
@@ -247,13 +230,8 @@ class CostumeEdit extends Component {
               onBlur={this.inputBlurHandler.bind(this, 'imageUrl')}
               valid={this.state.costumeForm['imageUrl'].valid}
               touched={this.state.costumeForm['imageUrl'].touched}
+              value={this.state.costumeForm['imageUrl'].value}
             />
-            {/* <div className="new-post__preview-image">
-              {!this.state.imagePreview && <p>Please choose an image.</p>}
-              {this.state.imagePreview && (
-                <Image imageUrl={this.state.imagePreview} contain left />
-              )}
-            </div> */}
             <Input
               id="description"
               label="Description"
