@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
-
 import Layout from './components/Layout/Layout';
 import Backdrop from './components/Backdrop/Backdrop';
 import Toolbar from './components/Toolbar/Toolbar';
@@ -8,15 +7,14 @@ import MainNavigation from './components/Navigation/MainNavigation/MainNavigatio
 import MobileNavigation from './components/Navigation/MobileNavigation/MobileNavigation';
 import ErrorHandler from './components/ErrorHandler/ErrorHandler';
 import CostumesPage from './pages/Costume/Costumes';
-import HomePage from './pages/Home/Home';
+import SingleOrderPage from './pages/Rental/SingleOrder/SingleOrder';
+import RentalsPage from './pages/Rental/Rentals';
 import SingleCostumePage from './pages/Costume/SingleCostume/SingleCostume';
 import LoginPage from './pages/Auth/Login';
 import SignupPage from './pages/Auth/Signup';
 import './App.css';
 import NewPassword from './pages/Auth/NewPassword';
-
-const sendgrid = require('@sendgrid/mail');
-sendgrid.setApiKey( process.env.SENDGRID_API_KEY );
+import CartPage from './pages/Rental/Cart';
 
 class App extends Component {
   state = {
@@ -31,6 +29,10 @@ class App extends Component {
   };
 
   componentDidMount() {
+    const queryString = require('query-string');
+
+    const queryParsed = queryString.parse(this.props.location.search);
+
     const token = localStorage.getItem('token');
     const expiryDate = localStorage.getItem('expiryDate');
     if (!token || !expiryDate) {
@@ -46,6 +48,7 @@ class App extends Component {
       new Date(expiryDate).getTime() - new Date().getTime();
     this.setState({ isAuth: true, token: token, userId: userId, isAdmin: isAdmin });
     this.setAutoLogout(remainingMilliseconds);
+    this.setState({queryParam: queryParsed})
   }
 
   mobileNavHandler = isOpen => {
@@ -61,6 +64,8 @@ class App extends Component {
     localStorage.removeItem('token');
     localStorage.removeItem('expiryDate');
     localStorage.removeItem('userId');
+    localStorage.removeItem('isAdmin');
+    localStorage.removeItem('isAuth')
   };
 
   loginHandler = (event, authData) => {
@@ -277,7 +282,15 @@ class App extends Component {
               />
             )}
           />
-        <Redirect to="/" />
+        <Redirect to="/" 
+          // render={props => (
+          //   <LoginPage
+          //     {...props}
+          //     onLogin={this.loginHandler}
+          //     loading={this.state.authLoading}
+          //   />
+          // )}
+        />
       </Switch>
     );
     if (this.state.isAuth) {
@@ -287,54 +300,12 @@ class App extends Component {
             path="/"
             exact
             render={props => (
-              <HomePage userId={this.state.userId} token={this.state.token} isAuth={this.state.isAuth} />
-            )}
-          />
-          <Route
-            path="/costumes"
-            exact
-            render={props => (
               <CostumesPage
               {...props}
               userId={this.state.userId} token={this.state.token}
               isAuth={this.state.isAuth}
               isAdmin={this.state.isAdmin}
               />
-            )}
-          />
-          <Route
-            path="/costumes/:costumeId"
-            exact
-            render={props => (
-              <SingleCostumePage
-                {...props}
-                userId={this.state.userId}
-                token={this.state.token}
-                isAuth={this.state.isAuth}
-                isAdmin={this.state.isAdmin}
-                onCart={this.cartHandler}
-              />
-            )}
-          />
-          <Redirect to="/" 
-            exact
-            render={props => (
-            <HomePage userId={this.state.userId} token={this.state.token} isAuth={this.state.isAuth} 
-            isAdmin={this.state.isAdmin} />)}
-          />
-        </Switch>
-      );
-    }
-
-    if (this.state.isAdmin) {
-      routes = (
-        <Switch>
-          <Route
-            path="/"
-            exact
-            render={props => (
-              <HomePage userId={this.state.userId} token={this.state.token} isAuth={this.state.isAuth}
-              isAdmin={this.state.isAdmin} />
             )}
           />
           <Route
@@ -364,9 +335,10 @@ class App extends Component {
             )}
           />
           <Route
-            path="/costumes/admin/edit/:costumeId"
+            path="/cart"
+            exact
             render={props => (
-              <SingleCostumePage
+              <CartPage
                 {...props}
                 userId={this.state.userId}
                 token={this.state.token}
@@ -377,9 +349,10 @@ class App extends Component {
             )}
           />
           <Route
-            path="/costumes/admin/delete/:costumeId"
+            path="/rentals"
+            exact
             render={props => (
-              <SingleCostumePage
+              <RentalsPage
                 {...props}
                 userId={this.state.userId}
                 token={this.state.token}
@@ -390,9 +363,10 @@ class App extends Component {
             )}
           />
           <Route
-            path="/costumes/admin/add-costume"
+            path="/rental/:rentalId"
+            exact
             render={props => (
-              <SingleCostumePage
+              <SingleOrderPage
                 {...props}
                 userId={this.state.userId}
                 token={this.state.token}
@@ -405,8 +379,12 @@ class App extends Component {
           <Redirect to="/" 
             exact
             render={props => (
-            <HomePage userId={this.state.userId} token={this.state.token} isAuth={this.state.isAuth} 
-            isAdmin={this.state.isAdmin} />)}
+              <CostumesPage
+              {...props}
+              isAdmin={false}
+              isAuth={false}
+              />
+            )}
           />
         </Switch>
       );
@@ -424,6 +402,7 @@ class App extends Component {
                 onOpenMobileNav={this.mobileNavHandler.bind(this, true)}
                 onLogout={this.logoutHandler}
                 isAuth={this.state.isAuth}
+                isAdmin={this.state.isAdmin}
               />
             </Toolbar>
           }
@@ -434,6 +413,7 @@ class App extends Component {
               onChooseItem={this.mobileNavHandler.bind(this, false)}
               onLogout={this.logoutHandler}
               isAuth={this.state.isAuth}
+              isAdmin={this.state.isAdmin}
             />
           }
         />

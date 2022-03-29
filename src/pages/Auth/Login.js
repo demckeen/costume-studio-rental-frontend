@@ -5,11 +5,11 @@ import Input from '../../components/Form/Input/Input';
 import Button from '../../components/Button/Button';
 import { required, length, email } from '../../util/validators';
 import Auth from './Auth';
-import sendgridTransport from 'nodemailer-sendgrid-transport';
 
 class Login extends Component {
   state = {
     isEditing: false,
+    passToken: '',
     loginForm: {
       email: {
         value: '',
@@ -93,19 +93,8 @@ class Login extends Component {
       .then(resData => {
         console.log(resData);
         const token = resData.token;
-        this.setState({isEditing: false});
-        sendgridTransport.sendMail({
-          to: email,
-          from: 'danamckeen@gmail.com',
-          subject: 'Your Password',
-          html: `
-              <p>You requested a password reset.</p> 
-              <p>Click this <a href="http://localhost:3000/reset/${token}" >link</a> 
-              to set a new password.</p>`
-              
-              // `<p>Click this <a href="http://localhost:3000/reset/${token}" >link</a> 
-              // to set a new password.</p>`    
-      });
+        this.setState({passToken: token, isEditing: false});
+        this.props.history.replace(`/newpassword/${token}`);
       })
       .catch(err => {
         console.log(err);

@@ -1,0 +1,58 @@
+.post {
+  margin: 1rem 0;
+  border-radius: 5px;
+  padding: 0.5rem;
+}
+
+.post__meta {
+  font-size: 1rem;
+  color: #707070;
+  margin: 0;
+}
+
+.post__title {
+  font-size: 1.5rem;
+  margin: 1rem 0;
+  color: #3d0000;
+}
+
+.post__image {
+  height: 15rem;
+  width: 100%;
+}
+
+.post__actions {
+  text-align: right;
+}
+
+.cartContainer {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.fee-quantity {
+  display: flex;
+  justify-content: space-around;
+}
+
+.fee-quantity .cartLabel {
+  font-weight: bold;
+}
+
+.rentalInfo {
+  display: grid;
+
+}
+
+@media (min-width: 768px) {
+  .post {
+    padding: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .rental-details {
+    display: grid; 
+    grid-template-columns: auto 200px;
+  }
+}
