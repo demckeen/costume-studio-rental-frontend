@@ -82,7 +82,7 @@ class Costumes extends Component {
   };
 
   newCostumeHandler = () => {
-    this.setState({ isEditing: false });
+    this.setState({ isEditing: true });
   };
 
   startEditCostumeHandler = costumeId => {
