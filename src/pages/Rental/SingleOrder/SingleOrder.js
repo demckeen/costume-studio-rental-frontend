@@ -19,19 +19,14 @@ class SingleOrder extends Component {
   componentDidMount() {
 
     this.loadRental();
-    // const socket = openSocket('http://localhost:8080');
-    // socket.on('cart', data => {
-    //   if(data.action === 'change') {
-    //     this.addCostume(data.costume);
-    //   }
-    // })
+
   }
 
   loadRental = () => {
     this.setState({rentalLoading: true});
     const rentalId = this.props.match.params.rentalId;
     console.log(rentalId);
-    fetch('http://localhost:8080/rentals/' + rentalId, {
+    fetch('http://costume-studio-rental.herokuapp.com/rentals/' + rentalId, {
       headers: {
         Authorization: 'Bearer ' + localStorage.getItem('token')
       }

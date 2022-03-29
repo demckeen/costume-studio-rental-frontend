@@ -24,12 +24,6 @@ class Costumes extends Component {
   componentDidMount() {
 
     this.loadCostumes();
-    const socket = openSocket('http://localhost:8080');
-    socket.on('costumes', data => {
-      if(data.action === 'create') {
-        this.addCostume(data.costume);
-      }
-    })
   }
 
   addCostume = costume => {
@@ -59,7 +53,7 @@ class Costumes extends Component {
       page--;
       this.setState({ costumePage: page });
     }
-    fetch('http://localhost:8080/costumes?page=' + page, {
+    fetch('http://costume-studio-rental.herokuapp.com/costumes?page=' + page, {
     })
     .then(res => {
       if (res.status !== 200) {
@@ -119,10 +113,10 @@ class Costumes extends Component {
     formData.append('description', costumeData.description);
     formData.append('imageUrl', costumeData.imageUrl);
     
-    let url = 'http://localhost:8080/admin/add-costume';
+    let url = 'http://costume-studio-rental.herokuapp.com/admin/add-costume';
     let method = 'POST';
     if (this.state.editPost) {
-      url = 'http://localhost:8080/admin/edit-costume/' + this.state.editCostume._id;
+      url = 'http://costume-studio-rental.herokuapp.com/admin/edit-costume/' + this.state.editCostume._id;
       method = 'PUT';
     }
 
@@ -181,7 +175,7 @@ class Costumes extends Component {
 
   deleteCostumeHandler = costumeId => {
     this.setState({ costumesLoading: true });
-    fetch('http://localhost:8080/admin/delete-costume/' + costumeId, {
+    fetch('http://costume-studio-rental.herokuapp.com/admin/delete-costume/' + costumeId, {
       method: "DELETE",
       headers: {
         Authorization: 'Bearer ' + this.props.token

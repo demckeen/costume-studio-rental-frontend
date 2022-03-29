@@ -16,17 +16,12 @@ class Rentals extends Component {
   componentDidMount() {
 
     this.loadRentals();
-    // const socket = openSocket('http://localhost:8080');
-    // socket.on('cart', data => {
-    //   if(data.action === 'change') {
-    //     this.addCostume(data.costume);
-    //   }
-    // })
+
   }
 
   loadRentals = () => {
     this.setState({rentalsLoading: true});
-    fetch('http://localhost:8080/rentals', {
+    fetch('http://costume-studio-rental.herokuapp.com/rentals', {
       method: 'GET', 
       headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token')
