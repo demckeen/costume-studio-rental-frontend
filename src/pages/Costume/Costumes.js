@@ -122,7 +122,7 @@ class Costumes extends Component {
 
     fetch(url, {
       method: method,
-      body: formData, 
+      body: JSON.stringify(Object.fromEntries(formData)), 
       headers: {
         Authorization: 'Bearer ' + this.props.token,
         'Content-Type': 'application/json'
