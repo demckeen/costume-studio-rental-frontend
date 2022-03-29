@@ -51,6 +51,7 @@ class CostumeEdit extends Component {
     formIsValid: false,
     imagePreview: null,
     editing: '',
+    editCostume: '',
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -159,7 +160,6 @@ class CostumeEdit extends Component {
       size: this.state.costumeForm.size.value,
       imageUrl: this.state.costumeForm.imageUrl.value,
       description: this.state.costumeForm.description.value,
-      costumeId: this.props.costumeId
     };
     this.props.onFinishEdit(costume);
     this.setState({
