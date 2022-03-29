@@ -159,7 +159,7 @@ class CostumeEdit extends Component {
       costumeId = this.selectedCostume._id;
     }
     else {
-      costumeID = '';
+      costumeId = '';
     }
     const costume = {
       category: this.state.costumeForm.category.value,
