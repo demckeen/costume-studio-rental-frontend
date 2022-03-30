@@ -52,7 +52,7 @@ class Costumes extends Component {
       page--;
       this.setState({ costumePage: page });
     }
-    fetch('https://costume-studio-rental.herokuapp.com//costumes?page=' + page, {
+    fetch('https://costume-studio-rental.herokuapp.com/costumes?page=' + page, {
     })
     .then(res => {
       if (res.status !== 200) {
@@ -112,12 +112,12 @@ class Costumes extends Component {
     formData.append('description', costumeData.description);
     formData.append('imageUrl', costumeData.imageUrl);
     
-    let url = 'https://costume-studio-rental.herokuapp.com//admin/add-costume';
+    let url = 'https://costume-studio-rental.herokuapp.com/admin/add-costume';
     let method = 'POST';
     let body = JSON.stringify(Object.fromEntries(formData));
     
     if (this.state.editCostume) {
-      url = 'https://costume-studio-rental.herokuapp.com//admin/edit-costume/';
+      url = 'https://costume-studio-rental.herokuapp.com/admin/edit-costume/';
       method = 'PUT';
       body = JSON.stringify({
         category: costumeData.category,
@@ -186,7 +186,7 @@ class Costumes extends Component {
 
   deleteCostumeHandler = costumeId => {
     this.setState({ costumesLoading: true });
-    fetch('https://costume-studio-rental.herokuapp.com//admin/delete-costume/' + costumeId, {
+    fetch('https://costume-studio-rental.herokuapp.com/admin/delete-costume/' + costumeId, {
       method: "DELETE",
       headers: {
         Authorization: 'Bearer ' + this.props.token
