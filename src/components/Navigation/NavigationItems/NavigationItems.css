@@ -19,7 +19,8 @@
 .navigation-item a:hover,
 .navigation-item a:active,
 .navigation-item a.active {
-  color: #BD8761;
+  color: #ca9874;
+  font-weight: 500;
 }
 
 .navigation-item:last-of-type {

@@ -26,7 +26,7 @@ class SingleOrder extends Component {
     this.setState({rentalLoading: true});
     const rentalId = this.props.match.params.rentalId;
     console.log(rentalId);
-    fetch('http://costume-studio-rental.herokuapp.com/rentals/' + rentalId, {
+    fetch('https://costume-studio-rental.herokuapp.com/rentals/' + rentalId, {
       headers: {
         Authorization: 'Bearer ' + localStorage.getItem('token')
       }
@@ -59,8 +59,9 @@ class SingleOrder extends Component {
         const month = dateData.getMonth();
         const day = dateData.getDate();
         
-         return  month + '/' + day + '/' + year;}
+         return ( month + 1 ) + '/' + day + '/' + year;}
         
+
         const rentalDate = createDate(resData.rental.rentalDate);
         const returnDate = createDate(resData.rental.returnDate);
 
@@ -100,7 +101,8 @@ class SingleOrder extends Component {
             <p style={{ textAlign: 'center' }}>No costumes in cart.</p>
           ) : null}
           {!this.state.rentalLoading && (
-            <div className="orderContainer">
+            <div className="orderTopContainer">
+              <div className="orderContainer">
               {this.state.orderItems.map(costume => (
                 <OrderItem                  
                   key={costume.costume._id + Math.random()}
@@ -118,6 +120,7 @@ class SingleOrder extends Component {
                   isAdmin={this.state.isAdmin}
                 />
               ))}
+              </div>
               <div className="rentalInfo">
                 <div className="rentalDate">
                   <p className="cartLabel total">Rental Date:</p>

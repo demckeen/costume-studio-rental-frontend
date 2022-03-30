@@ -4,7 +4,6 @@ import Backdrop from '../../Backdrop/Backdrop';
 import Modal from '../../Modal/Modal';
 import Input from '../../Form/Input/Input';
 import { required, length } from '../../../util/validators';
-import { generateBase64FromImage } from '../../../util/image';
 
 const COSTUME_FORM = {
   category: {
@@ -49,7 +48,9 @@ class CostumeEdit extends Component {
   state = {
     costumeForm: COSTUME_FORM,
     formIsValid: false,
-    imagePreview: null
+    imagePreview: null,
+    editing: '',
+    editCostume: '',
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -95,15 +96,7 @@ class CostumeEdit extends Component {
   }
 
   postInputChangeHandler = (input, value, files) => {
-    if (files) {
-      generateBase64FromImage(files[0])
-        .then(b64 => {
-          this.setState({ imagePreview: b64 });
-        })
-        .catch(e => {
-          this.setState({ imagePreview: null });
-        });
-    }
+
     this.setState(prevState => {
       let isValid = true;
       for (const validator of prevState.costumeForm[input].validators) {
@@ -145,19 +138,28 @@ class CostumeEdit extends Component {
   cancelCostumeChangeHandler = () => {
     this.setState({
       costumeForm: COSTUME_FORM,
-      formIsValid: false
+      formIsValid: false,
     });
     this.props.onCancelEdit();
   };
 
   acceptCostumeChangeHandler = () => {
+
+    let costumeId;
+    if(this.state.selectedCostume) {
+      costumeId = this.selectedCostume._id;
+    }
+    else {
+      costumeId = '';
+    }
     const costume = {
       category: this.state.costumeForm.category.value,
       costumeName: this.state.costumeForm.costumeName.value,
       rentalFee: this.state.costumeForm.rentalFee.value,
       size: this.state.costumeForm.size.value,
       imageUrl: this.state.costumeForm.imageUrl.value,
-      description: this.state.costumeForm.description.value
+      description: this.state.costumeForm.description.value,
+      costumeId: costumeId
     };
     this.props.onFinishEdit(costume);
     this.setState({
@@ -219,15 +221,6 @@ class CostumeEdit extends Component {
               touched={this.state.costumeForm['size'].touched}
               value={this.state.costumeForm['size'].value}
             />
-            {/* <FilePicker
-              id="imageUrl"
-              label="Image URL"
-              control="input"
-              onChange={this.postInputChangeHandler}
-              onBlur={this.inputBlurHandler.bind(this, 'imageUrl')}
-              valid={this.state.costumeForm['imageUrl'].valid}
-              touched={this.state.costumeForm['imageUrl'].touched}
-            /> */}
             <Input
               id="imageUrl"
               label="Image URL"
@@ -236,13 +229,8 @@ class CostumeEdit extends Component {
               onBlur={this.inputBlurHandler.bind(this, 'imageUrl')}
               valid={this.state.costumeForm['imageUrl'].valid}
               touched={this.state.costumeForm['imageUrl'].touched}
+              value={this.state.costumeForm['imageUrl'].value}
             />
-            {/* <div className="new-post__preview-image">
-              {!this.state.imagePreview && <p>Please choose an image.</p>}
-              {this.state.imagePreview && (
-                <Image imageUrl={this.state.imagePreview} contain left />
-              )}
-            </div> */}
             <Input
               id="description"
               label="Description"

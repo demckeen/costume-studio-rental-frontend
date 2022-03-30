@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from 'react';
-import openSocket from 'socket.io-client';
 import Costume from '../../components/Costume/Costume/Costume';
 import CostumeEdit from '../../components/Costume/CostumeEdit/CostumeEdit';
 import Button from '../../components/Button/Button';
@@ -18,7 +17,7 @@ class Costumes extends Component {
     costumesLoading: true,
     editLoading: false,
     isAuth: false,
-    isAdmin: false,
+    isAdmin: false
   };
 
   componentDidMount() {
@@ -29,10 +28,10 @@ class Costumes extends Component {
   addCostume = costume => {
     this.setState(prevState => {
       const updatedCostumes = [...prevState.costumes];
-      if(prevState.costumePage === 1) {
+
         updatedCostumes.pop();
         updatedCostumes.unshift(costume);
-      }
+
       return {
         costumes: updatedCostumes,
         totalCostumes: prevState.totalCostumes +1
@@ -53,7 +52,7 @@ class Costumes extends Component {
       page--;
       this.setState({ costumePage: page });
     }
-    fetch('http://costume-studio-rental.herokuapp.com/costumes?page=' + page, {
+    fetch('https://costume-studio-rental.herokuapp.com/costumes?page=' + page, {
     })
     .then(res => {
       if (res.status !== 200) {
@@ -113,18 +112,30 @@ class Costumes extends Component {
     formData.append('description', costumeData.description);
     formData.append('imageUrl', costumeData.imageUrl);
     
-    let url = 'http://costume-studio-rental.herokuapp.com/admin/add-costume';
+    let url = 'https://costume-studio-rental.herokuapp.com/admin/add-costume';
     let method = 'POST';
-    if (this.state.editPost) {
-      url = 'http://costume-studio-rental.herokuapp.com/admin/edit-costume/' + this.state.editCostume._id;
+    let body = JSON.stringify(Object.fromEntries(formData));
+    
+    if (this.state.editCostume) {
+      url = 'https://costume-studio-rental.herokuapp.com/admin/edit-costume/';
       method = 'PUT';
+      body = JSON.stringify({
+        category: costumeData.category,
+        costumeName: costumeData.costumeName,
+        size: costumeData.size,
+        rentalFee: costumeData.rentalFee,
+        description: costumeData.description,
+        imageUrl: costumeData.imageUrl,
+        costumeId: this.state.editCostume._id
+      })
     }
 
     fetch(url, {
       method: method,
-      body: formData, 
+      body: body, 
       headers: {
-        Authorization: 'Bearer ' + this.props.token
+        Authorization: 'Bearer ' + this.props.token,
+        'Content-Type': 'application/json'
       }
       
     })
@@ -138,7 +149,7 @@ class Costumes extends Component {
         console.log(resData);
         const costume = {
           id: resData.costume._id,
-          costumeCategory: resData.costume.category,
+          category: resData.costume.category,
           costumeName: resData.costume.costumeName,
           costumeFee: resData.costume.rentalFee,
           size: resData.costume.size,
@@ -147,20 +158,20 @@ class Costumes extends Component {
           adminId: resData.costume.userId
         };
         this.setState(prevState => {
-          let updatedCostumes = [...prevState.costumes];
-          if (prevState.editCostume) {
-            const costumeIndex = prevState.costumes.findIndex(
-              c => c._id === prevState.editCostume._id
-            );
-            updatedCostumes[costumeIndex] = costume;
-          }
+          const updatedCostumes = [...prevState.costumes];
+            if (prevState.editCostume) {
+              const costumeIndex = prevState.costumes.findIndex(
+                c => c._id === prevState.editCostume._id
+              );
+              updatedCostumes[costumeIndex] = costume;
+            }
           return {
-            posts: updatedCostumes,
+            costumes: updatedCostumes,
             isEditing: false,
             editCostume: null,
-            editLoading: false
-          };
-        });
+            editLoading: false,
+            costumesLoading: false
+        }});
       })
       .catch(err => {
         console.log(err);
@@ -175,7 +186,7 @@ class Costumes extends Component {
 
   deleteCostumeHandler = costumeId => {
     this.setState({ costumesLoading: true });
-    fetch('http://costume-studio-rental.herokuapp.com/admin/delete-costume/' + costumeId, {
+    fetch('https://costume-studio-rental.herokuapp.com/admin/delete-costume/' + costumeId, {
       method: "DELETE",
       headers: {
         Authorization: 'Bearer ' + this.props.token
@@ -222,7 +233,7 @@ class Costumes extends Component {
                 onCancelEdit={this.cancelEditHandler}
                 onFinishEdit={this.finishEditHandler}
               />
-            <section className="feed__control">
+            <section className="feed__control admin-button">
               <Button mode="raised" design="accent" onClick={this.newCostumeHandler}>
                 New Costume
               </Button>
