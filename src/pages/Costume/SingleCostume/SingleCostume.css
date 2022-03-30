@@ -40,34 +40,7 @@ h1.costumeTitle {
   border-radius: 5px;
 }
 
-.adminActions a {
-  border-radius: 5px;
-  background-color: #082b50;
-  color: white;
-  text-transform: none;
-  padding: 12px 1.5rem;
-  transition: all .3s ease-in-out;
-}
-
-.adminActions a:hover {
-  background-color: #033569;
-  color: white;
-  transition: all .3s ease-in-out;
-}
-
-.adminActions a.button--danger {
-  background-color: #9b0000;
-  color: white;
-  transition: all .3s ease-in-out;
-}
-
-.adminActions a.button--danger:hover {
-  background-color: #af0000;
-  color: white;
-  transition: all .3s ease-in-out;
-}
-
-.single-post button.button {
+.adminActions button:nth-of-type(2) {
   border-radius: 5px;
   background-color: #3d0000;
   color: white;
@@ -76,8 +49,36 @@ h1.costumeTitle {
   transition: all .3s ease-in-out;
 }
 
-.single-post button.button:hover {
+.adminActions button:nth-of-type(2):hover {
   background-color: #660000;
+  color: white;
+  transition: all .3s ease-in-out;
+}
+
+.adminActions .button--danger {
+  background-color: #9b0000;
+  color: white;
+  text-transform: none;
+  transition: all .3s ease-in-out;
+}
+
+.adminActions .button--danger:hover {
+  background-color: #af0000;
+  color: white;
+  transition: all .3s ease-in-out;
+}
+
+.single-post button.button:first-of-type {
+  border-radius: 5px;
+  background-color: #033569;
+  color: white;
+  text-transform: none;
+  padding: 12px 1.5rem;
+  transition: all .3s ease-in-out;
+}
+
+.single-post button.button:first-of-type:hover {
+  background-color:#004fa3;
   transition: all .3s ease-in-out
 }
 

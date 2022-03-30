@@ -21,7 +21,7 @@ class Rentals extends Component {
 
   loadRentals = () => {
     this.setState({rentalsLoading: true});
-    fetch('https://costume-studio-rental.herokuapp.com/rentals', {
+    fetch('http://localhost:8080/rentals', {
       method: 'GET', 
       headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token')

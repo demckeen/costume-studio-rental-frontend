@@ -28,7 +28,7 @@ class Cart extends Component {
   removeCostume = costumeIdv => {
     this.setState({cartLoading: true});
     console.log(costumeIdv);
-    fetch('https://costume-studio-rental.herokuapp.com/cancel-rental', {
+    fetch('http://localhost:8080/cancel-rental', {
       method: 'DELETE', 
       body: JSON.stringify({ costumeId: costumeIdv }),
       headers: {
@@ -49,7 +49,7 @@ class Cart extends Component {
 
   loadCart = () => {
     this.setState({cartLoading: true});
-    fetch('https://costume-studio-rental.herokuapp.com/cart', {
+    fetch('http://localhost:8080/cart', {
       method: 'GET', 
       headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token')
@@ -86,7 +86,7 @@ class Cart extends Component {
 
   checkoutHandler = () => {
     this.setState({ isEditing: true });
-    fetch('https://costume-studio-rental.herokuapp.com/checkout', {
+    fetch('http://localhost:8080/checkout', {
       method: 'GET', 
       headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token')
@@ -133,7 +133,8 @@ class Cart extends Component {
           ) : null}
           {!this.state.costumesLoading && this.state.cartItems.length > 0 ? (
           <section>
-            <div className="cartContainer">
+            <div className="cartTopContainer">
+              <div className="cartContainer">
               {this.state.cartItems.map(costume => (
                 <CartItem
                   key={costume.costumeId._id + Math.random()}
@@ -151,16 +152,19 @@ class Cart extends Component {
                   onDelete={this.removeCostume.bind(this, costume.costumeId._id)}
                 />
               ))}
-              <div className="cartTotal">
-                <p className="cartLabel total">Total:</p>
-                <p className="cartValue total">${this.state.cartTotal}.00</p>
-              </div> 
-            </div>
-            <div>
-              <Button mode="raised" design="accent" onClick={this.checkoutHandler}>
-                Place Order
-              </Button>
-            </div>
+              </div>
+              <div className="totalAndButton">
+                <div className="cartTotal">
+                  <p className="cartLabel total">Total:</p>
+                  <p className="cartValue total">${this.state.cartTotal}.00</p>
+                </div> 
+                <div>
+                  <Button mode="raised" design="accent" onClick={this.checkoutHandler}>
+                    Place Order
+                  </Button>
+                </div>
+              </div>
+              </div>
           </section>) : null }
         </section>
       </Fragment>

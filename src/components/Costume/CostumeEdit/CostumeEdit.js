@@ -4,7 +4,6 @@ import Backdrop from '../../Backdrop/Backdrop';
 import Modal from '../../Modal/Modal';
 import Input from '../../Form/Input/Input';
 import { required, length } from '../../../util/validators';
-import { generateBase64FromImage } from '../../../util/image';
 
 const COSTUME_FORM = {
   category: {

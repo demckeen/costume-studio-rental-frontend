@@ -77,7 +77,7 @@ class Login extends Component {
   finishResetHandler = email => {
     this.setState({ isEditing: true });
     console.log(email)
-    fetch('https://costume-studio-rental.herokuapp.com/auth/reset', {
+    fetch('http://localhost:8080/auth/reset', {
       method: "POST",
       body: JSON.stringify({ email: email }),
       headers: {
@@ -123,7 +123,7 @@ class Login extends Component {
         >
           <Input
             id="email"
-            label="Your E-Mail"
+            label="Email"
             type="email"
             control="input"
             onChange={this.inputChangeHandler}
