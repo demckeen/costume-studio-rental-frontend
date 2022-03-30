@@ -71,7 +71,7 @@ class App extends Component {
   loginHandler = (event, authData) => {
     event.preventDefault();
     this.setState({ authLoading: true });
-    fetch('http://localhost:8080/auth/login', {
+    fetch('https://costume-studio-rental.herokuapp.com//auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -123,7 +123,7 @@ class App extends Component {
   signupHandler = (event, authData) => {
     event.preventDefault();
     this.setState({ authLoading: true });
-    fetch('http://localhost:8080/auth/signup', {
+    fetch('https://costume-studio-rental.herokuapp.com//auth/signup', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -163,7 +163,7 @@ class App extends Component {
 
   setNewPasswordHandler = (event, passwordvar) => {
     event.preventDefault();
-    let url = 'http://localhost:8080/auth/new-password';
+    let url = 'https://costume-studio-rental.herokuapp.com//auth/new-password';
     let method = 'POST';
     let newpassword = passwordvar.password;
     let passToken = passwordvar.passToken;
@@ -196,7 +196,7 @@ class App extends Component {
 
   cartHandler = (event, reqId) => {
     const token = localStorage.getItem('token');
-    fetch('http://localhost:8080/cart/', {
+    fetch('https://costume-studio-rental.herokuapp.com//cart/', {
       method: 'POST',
       body: {
  

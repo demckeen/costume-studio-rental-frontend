@@ -77,7 +77,7 @@ class Login extends Component {
   finishResetHandler = email => {
     this.setState({ isEditing: true });
     console.log(email)
-    fetch('http://localhost:8080/auth/reset', {
+    fetch('https://costume-studio-rental.herokuapp.com//auth/reset', {
       method: "POST",
       body: JSON.stringify({ email: email }),
       headers: {

@@ -26,7 +26,7 @@ class SingleOrder extends Component {
     this.setState({rentalLoading: true});
     const rentalId = this.props.match.params.rentalId;
     console.log(rentalId);
-    fetch('http://localhost:8080/rentals/' + rentalId, {
+    fetch('https://costume-studio-rental.herokuapp.com//rentals/' + rentalId, {
       headers: {
         Authorization: 'Bearer ' + localStorage.getItem('token')
       }

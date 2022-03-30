@@ -29,7 +29,7 @@ class SingleCostume extends Component {
     const costumeId = this.props.match.params.costumeId;
     this.setState({token: localStorage.getItem('token') });
 
-    fetch('http://localhost:8080/costumes/' + costumeId, {
+    fetch('https://costume-studio-rental.herokuapp.com//costumes/' + costumeId, {
       headers: {
         Authorization: 'Bearer ' + this.state.token
       }
@@ -91,7 +91,7 @@ class SingleCostume extends Component {
     formData.append('imageUrl', costumeData.imageUrl);
     
   
-    fetch('http://localhost:8080/admin/edit-costume/', {
+    fetch('https://costume-studio-rental.herokuapp.com//admin/edit-costume/', {
     method: 'PUT',
     body: JSON.stringify({
       category: costumeData.category,
@@ -142,7 +142,7 @@ class SingleCostume extends Component {
 
   deleteCostumeHandler = costumeId => {
     this.setState({ costumesLoading: true });
-    fetch('http://localhost:8080/admin/delete-costume/' + costumeId, {
+    fetch('https://costume-studio-rental.herokuapp.com//admin/delete-costume/' + costumeId, {
       method: "DELETE",
       headers: {
         Authorization: 'Bearer ' + this.props.token
@@ -167,7 +167,7 @@ class SingleCostume extends Component {
 
   addCartHandler = (event, reqId) => {
     const token = localStorage.getItem('token');
-    fetch('http://localhost:8080/cart/', {
+    fetch('https://costume-studio-rental.herokuapp.com//cart/', {
       method: 'POST',
       body: JSON.stringify({
         costumeId: this.state.id,
