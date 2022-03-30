@@ -253,7 +253,7 @@ p.rental-id {
     row-gap: 1rem;
   }
 
-  .orderContainer .rentalInfo .orderDate p, .orderContainer .rentalInfo .returnDate p, .orderContainer .rentalInfo .cartTotal p {
+  .orderContainer .rentalInfo .rentalDate p, .orderContainer .rentalInfo .returnDate p, .orderContainer .rentalInfo .cartTotal p {
     text-align: left;
     max-width: 118px;
     margin: 0 auto;

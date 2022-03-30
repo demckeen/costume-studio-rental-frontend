@@ -83,7 +83,7 @@ class Rentals extends Component {
                   key={rental._id + Math.random()}
                   id={rental._id}
                   userId={rental.userId}
-                  orderDate={rental.rentalDate}
+                  rentalDate={rental.rentalDate}
                   returnDate={rental.returnDate}
                   costumes={rental.costumes}
                   isAuth={this.state.isAuth}

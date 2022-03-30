@@ -12,14 +12,15 @@ export default function RentalOrder(props) {
   
    return  ( month + 1 ) + '/' + day + '/' + year;}
   
-  const orderDate = createDate(props.orderDate);
+
+  const rentalDate = createDate(props.rentalDate);
   const returnDate = createDate(props.returnDate);
 
   return (
   <article className="rental-container" key={`${props.id}-article`}>
     <div className="rental" key={`${props.id}-header`}>
       <div className="rentalDetail"> 
-        <p className="rental-label">Order ID:</p> 
+        <p className="rental-label">Rental ID:</p> 
         <Link to={'/rental/' + props.id} className="rental-id" key={`${props.id}-details`}>
           {props.id}
         </Link>
@@ -30,8 +31,8 @@ export default function RentalOrder(props) {
           </p>
         </div>
         <div className="rentalDates">
-          <p className="rental-order-date" key={`${props.id}-orderDate`}>
-              <span className="rental-label">Order Date: </span><span className="value">{orderDate}</span>
+          <p className="rental-order-date" key={`${props.id}-rentalDate`}>
+              <span className="rental-label">Rental Date: </span><span className="value">{rentalDate}</span>
           </p>
           <p className="rental-return-date" key={`${props.id}-returnDate`}>
             <span className="rental-label">Return Date: </span><span className="value">{returnDate}</span>
